@@ -4,74 +4,92 @@
    design-system.css. */
 
 @theme {
-  --font-sans: var(--font-family-font);
-  --font-display: var(--font-family-font);
+  /* Exact primitive sizes and semantic fonts exported from Figma. */
+  --text-2xs: var(--typography-font-size-2xs);
+  --text-xs: var(--typography-font-size-xs);
+  --text-sm: var(--typography-font-size-md);
+  --text-base: var(--typography-font-size-base);
+  --text-lg: var(--typography-font-size-lg);
+  --text-xl: var(--typography-font-size-xl);
+  --text-2xl: var(--typography-font-size-2xl);
+  --text-3xl: var(--typography-font-size-3xl);
+  --text-4xl: var(--typography-font-size-4xl);
+  --text-5xl: var(--typography-font-size-5xl);
+  --text-6xl: var(--typography-font-size-6xl);
+  --text-7xl: var(--typography-font-size-7xl);
+  --text-8xl: var(--typography-font-size-8xl);
+  --text-9xl: var(--typography-font-size-9xl);
+  --font-weight-semibold: var(--typography-font-weight-semibold);
+  --font-weight-extra-bold: var(--typography-font-weight-extra-bold);
 
-  --font-weight-light: 300;
-  --font-weight-regular: var(--font-weight-normal);
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-bold: 700;
-  --font-weight-black: 900;
+  --font-sans: var(--typography-family-font-family-font);
+  --font-display: var(--typography-family-font-family-font);
+
+  --font-weight-light: var(--typography-font-weight-light);
+  --font-weight-regular: var(--typography-font-weight-regular);
+  --font-weight-normal: var(--typography-font-weight-regular);
+  --font-weight-medium: var(--typography-font-weight-medium);
+  --font-weight-bold: var(--typography-font-weight-bold);
+  --font-weight-black: var(--typography-font-weight-900);
 
   /* Roles tipográficos: combinaciones tamaño/interlineado/peso que componentes
      y vistas ya repiten. Generan text-display, text-heading-lg… y los consume Text. */
   --text-display: var(--text-4xl);
   --text-display--line-height: 1.2;
-  --text-display--font-weight: var(--font-weight-bold);
+  --text-display--font-weight: var(--typography-font-weight-bold);
   --text-heading-lg: var(--text-2xl);
-  --text-heading-lg--line-height: var(--line-height-28);
-  --text-heading-lg--font-weight: var(--font-weight-bold);
+  --text-heading-lg--line-height: var(--typography-line-height-700);
+  --text-heading-lg--font-weight: var(--typography-font-weight-bold);
   --text-heading-md: var(--text-xl);
   --text-heading-md--line-height: 1.3;
-  --text-heading-md--font-weight: var(--font-weight-bold);
+  --text-heading-md--font-weight: var(--typography-font-weight-bold);
   --text-label: var(--text-base);
-  --text-label--line-height: var(--line-height-20);
-  --text-label--font-weight: var(--font-weight-medium);
+  --text-label--line-height: var(--typography-line-height-400);
+  --text-label--font-weight: var(--typography-font-weight-medium);
   --text-label-sm: var(--text-sm);
-  --text-label-sm--line-height: var(--line-height-16);
-  --text-label-sm--font-weight: var(--font-weight-medium);
+  --text-label-sm--line-height: var(--typography-line-height-300);
+  --text-label-sm--font-weight: var(--typography-font-weight-medium);
   --text-body: var(--text-base);
-  --text-body--line-height: var(--line-height-20);
-  --text-body--font-weight: var(--font-weight-normal);
+  --text-body--line-height: var(--typography-line-height-400);
+  --text-body--font-weight: var(--typography-font-weight-regular);
   --text-body-sm: var(--text-sm);
-  --text-body-sm--line-height: var(--line-height-16);
-  --text-body-sm--font-weight: var(--font-weight-normal);
+  --text-body-sm--line-height: var(--typography-line-height-300);
+  --text-body-sm--font-weight: var(--typography-font-weight-regular);
   --text-caption: var(--text-xs);
-  --text-caption--line-height: var(--line-height-14);
-  --text-caption--font-weight: var(--font-weight-normal);
+  --text-caption--line-height: var(--typography-line-height-200);
+  --text-caption--font-weight: var(--typography-font-weight-regular);
 
-  --border-width-1: var(--stroke-1);
-  --border-width-2: var(--stroke-2);
-  --border-width-4: var(--stroke-4);
+  --border-width-1: var(--size-stroke-border);
+  --border-width-2: var(--size-stroke-border-bold);
+  --border-width-4: var(--size-stroke-border-bold);
 
-  --shadow-medium: 0 4px 6px -1px var(--color-effect-shadow-medium), 0 2px 4px -2px var(--color-effect-shadow-medium);
-  --shadow-soft: 0 4px 6px -1px var(--color-effect-shadow-soft), 0 2px 4px -2px var(--color-effect-shadow-soft);
-  --shadow-subtle: 0 1px 3px 0 var(--color-effect-shadow-subtle), 0 1px 2px -1px var(--color-effect-shadow-subtle);
-  --shadow-button-interaction: 0 0 4px var(--color-effect-shadow-soft), 0 2px 2px var(--color-effect-shadow-soft);
-  --shadow-table-row-divider: inset 0 -1px 0 var(--color-neutral-border-subtle);
-  --shadow-table-footer-divider: inset 0 1px 0 var(--color-neutral-border-subtle);
-  --shadow-calendar: 0 0 4px var(--color-effect-shadow-soft), 0 4px 8px var(--color-effect-shadow-soft);
-  --shadow-overlay-l: 0 0 16px var(--color-effect-shadow-subtle), 0 0 84px var(--color-effect-shadow-subtle);
-  --shadow-overlay-m: 0 0 8px var(--color-effect-shadow-subtle), 0 0 12px var(--color-effect-shadow-subtle);
-  --shadow-dropdown: 0 0 2px 0 var(--color-effect-shadow-subtle), 0 4px 12px 0 var(--color-effect-shadow-subtle);
-  --shadow-down-s: 0 0 4px var(--color-effect-shadow-subtle), 0 2px 2px var(--color-effect-shadow-subtle);
-  --shadow-down-m: 0 4px 8px var(--color-effect-shadow-subtle), 0 0 4px var(--color-effect-shadow-subtle);
-  --shadow-overlay-s: 0 0 12px var(--color-effect-shadow-subtle), 0 0 4px var(--color-effect-shadow-subtle);
-  --shadow-card-overlay-s: 0 0 4px var(--color-effect-shadow-subtle), 0 0 12px var(--color-effect-shadow-subtle);
-  --shadow-up-l: 0 0 2px 0 var(--color-effect-shadow-subtle), 0 -4px 12px 0 var(--color-effect-shadow-subtle);
-  --shadow-card-active: 0 0 0 2px var(--color-effect-focus-secondary);
-  --shadow-card-overlay-active: 0 0 0 2px var(--color-effect-focus-secondary), 0 0 16px var(--color-effect-shadow-soft), 0 0 84px var(--color-effect-shadow-soft);
+  --shadow-medium: 0 4px 6px -1px var(--color-shadows-medium), 0 2px 4px -2px var(--color-shadows-medium);
+  --shadow-soft: 0 4px 6px -1px var(--color-shadows-soft), 0 2px 4px -2px var(--color-shadows-soft);
+  --shadow-subtle: 0 1px 3px 0 var(--color-shadows-soft), 0 1px 2px -1px var(--color-shadows-soft);
+  --shadow-button-interaction: 0 0 4px var(--color-shadows-soft), 0 2px 2px var(--color-shadows-soft);
+  --shadow-table-row-divider: inset 0 -1px 0 var(--color-neutral-border-softest);
+  --shadow-table-footer-divider: inset 0 1px 0 var(--color-neutral-border-softest);
+  --shadow-calendar: 0 0 4px var(--color-shadows-soft), 0 4px 8px var(--color-shadows-soft);
+  --shadow-overlay-l: 0 0 16px var(--color-shadows-soft), 0 0 84px var(--color-shadows-soft);
+  --shadow-overlay-m: 0 0 8px var(--color-shadows-soft), 0 0 12px var(--color-shadows-soft);
+  --shadow-dropdown: 0 0 2px 0 var(--color-shadows-soft), 0 4px 12px 0 var(--color-shadows-soft);
+  --shadow-down-s: 0 0 4px var(--color-shadows-soft), 0 2px 2px var(--color-shadows-soft);
+  --shadow-down-m: 0 4px 8px var(--color-shadows-soft), 0 0 4px var(--color-shadows-soft);
+  --shadow-overlay-s: 0 0 12px var(--color-shadows-soft), 0 0 4px var(--color-shadows-soft);
+  --shadow-card-overlay-s: 0 0 4px var(--color-shadows-soft), 0 0 12px var(--color-shadows-soft);
+  --shadow-up-l: 0 0 2px 0 var(--color-shadows-soft), 0 -4px 12px 0 var(--color-shadows-soft);
+  --shadow-card-active: 0 0 0 2px var(--color-theme-border-soft);
+  --shadow-card-overlay-active: 0 0 0 2px var(--color-theme-border-soft), 0 0 16px var(--color-shadows-soft), 0 0 84px var(--color-shadows-soft);
 
-  --blur-dense: var(--blur-3xl);
-  --blur-thick: var(--blur-2xl);
-  --blur-medium: var(--blur-xl);
-  --blur-thin: var(--blur-md);
-  --blur-light: var(--blur-default);
-  --blur-navbar: calc(var(--blur-3xl) / 2);
+  --blur-dense: var(--size-blur-2400);
+  --blur-thick: var(--size-blur-1200);
+  --blur-medium: var(--size-blur-1200);
+  --blur-thin: var(--size-blur-300);
+  --blur-light: var(--size-blur-300);
+  --blur-navbar: calc(var(--size-blur-2400) / 2);
 
-  --color-focus-primary: var(--color-effect-focus-primary);
-  --color-focus-secondary: var(--color-effect-focus-secondary);
+  --color-focus-primary: var(--color-theme-border-primary);
+  --color-focus-secondary: var(--color-theme-border-soft);
 }
 
 @utility scrollbar-none {

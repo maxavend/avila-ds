@@ -22,3 +22,14 @@ npm run typecheck
 npm run test
 npm run build-storybook
 ```
+
+### Tokens Figma (Base / Ávila)
+
+El tema usa las variables oficiales de `src/design-tokens/figma-tokens.css` y muestra `Ávila/Foundations/Tokens` en Storybook. El selector de la barra permite alternar entre los modos `base` y `avila`. Para componentes nuevos, usar las variables CSS semánticas directamente; las clases del sistema anterior pasan por un puente de compatibilidad sin HEX alternativos. Ver `docs/tokens.md`.
+
+```bash
+npm run check:tokens
+npm run typecheck
+npm test
+npm run build-storybook
+```

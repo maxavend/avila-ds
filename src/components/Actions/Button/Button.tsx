@@ -91,24 +91,24 @@ const HOVER_SHADOW = "hover:shadow-button-interaction";
 
 const VARIANT_STYLES: Record<ButtonVariant, string> = {
   Primary: cn(
-    "bg-primary-bg-default text-neutral-text-contrast",
-    "hover:bg-primary-bg-action-hover",
-    "active:bg-primary-bg-action-pressed"
+    "bg-(--color-theme-background-primary) text-(--color-neutral-text-contrast)",
+    "hover:bg-(--color-theme-background-hover)",
+    "active:bg-(--color-theme-background-pressed)"
   ),
   Secondary: cn(
-    "bg-primary-bg-soft text-primary-text-default",
-    `hover:bg-primary-bg-action-soft-hover hover:text-primary-text-strong ${HOVER_SHADOW}`,
-    "active:bg-primary-bg-action-soft-pressed active:text-primary-text-strong active:shadow-none"
+    "bg-(--color-theme-background-soft) text-(--color-theme-text-primary)",
+    `hover:bg-(--color-theme-background-soft) hover:text-(--color-theme-text-strong) ${HOVER_SHADOW}`,
+    "active:bg-(--color-theme-background-soft) active:text-(--color-theme-text-strong) active:shadow-none"
   ),
   Tertiary: cn(
-    "bg-transparent text-primary-text-default underline shadow-none",
-    "hover:text-primary-text-strong",
-    "active:text-primary-text-strong active:shadow-none"
+    "bg-transparent text-(--color-theme-text-primary) underline shadow-none",
+    "hover:text-(--color-theme-text-strong)",
+    "active:text-(--color-theme-text-strong) active:shadow-none"
   ),
   Destructive: cn(
-    "bg-danger-bg-default text-neutral-text-contrast",
-    "hover:bg-danger-bg-action-hover",
-    "active:bg-danger-bg-action-pressed"
+    "bg-(--color-red-background-default) text-(--color-neutral-text-contrast)",
+    "hover:bg-(--color-red-background-hover)",
+    "active:bg-(--color-red-background-pressed)"
   ),
 };
 
@@ -180,7 +180,7 @@ export const Button = React.memo(({
       className={cn(
         "inline-flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis t-control-colors",
         "font-sans font-medium",
-        "rounded-button-default border-none",
+        "rounded-(--radius-button) border-none",
         "gap-2",
         "shadow-none",
         "  ",
@@ -191,8 +191,8 @@ export const Button = React.memo(({
         size === 'S' && "h-8 px-4 text-sm leading-4",
         VARIANT_STYLES[variant],
         isInactive && cn(
-          "text-neutral-text-action-disabled opacity-100 cursor-not-allowed pointer-events-none border-none shadow-none",
-          variant !== 'Tertiary' && "bg-neutral-bg-action-disabled"
+          "text-(--color-neutral-text-disabled) opacity-100 cursor-not-allowed pointer-events-none border-none shadow-none",
+          variant !== 'Tertiary' && "bg-(--color-neutral-background-disabled)"
         ),
         className
       )}

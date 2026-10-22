@@ -1,16 +1,19 @@
+> **Actualización de tokens (22-10-2026):** el export CSS de Figma está
+> incorporado en `src/design-tokens/figma-tokens.css` como fuente de verdad
+> para Primitive + Semantic (modos `base` y `avila`). Las notas anteriores
+> `POR EXTRAER` sobre **colores, espaciado, radios y tipografía** quedan
+> supersedidas por ese archivo; los detalles geométricos por componente aún
+> requieren revisión visual. No regenerar la paleta provisional.
+>
+> **Regla para agentes:** las variables y alias del export adjunto mandan,
+> incluyendo `--radius-full` diferente entre ambos modos. Reutilizar el
+> nombre original en nuevos componentes; `legacy-utility-bridge.css` solo
+> conserva compatibilidad de clases existentes, no autoriza nuevos tokens.
+
 ---
 version: alpha
 name: "Portfolio Design System — identidad basada en Figma"
 description: "Contrato visual y protocolo de migración para construir una biblioteca personal de componentes React y Storybook a partir de una base técnica autorizada, tomando el archivo Figma indicado como referencia de diseño."
-omitted:
-  - section: colors
-    reason: "Pendiente de extraer y verificar valores reales de las variables y estilos de Figma; no inventar HEX ni roles semánticos."
-  - section: typography
-    reason: "Pendiente de inspeccionar las familias, pesos, tamaños y métricas tipográficas reales en Figma."
-  - section: spacing
-    reason: "Pendiente de medir variables y Auto Layout reales de Figma; no asumir una escala 4/8."
-  - section: rounded
-    reason: "Pendiente de medir radios reales de componentes y estilos de Figma."
 components:
   button-large:
     height: "52px"
@@ -286,3 +289,22 @@ No declarar éxito sin evidencia. No borrar ni modificar masivamente materiales 
 ### Primer encargo al agente
 
 > Lee `DESIGN.md` completo. Analiza el ZIP del DS/Storybook y el archivo Figma indicado. No hagas cambios todavía: produce una auditoría técnica, un inventario de tokens verificables de Figma y una matriz de correspondencia de componentes. Prioriza la reutilización directa de la implementación aportada por el usuario, mantén el Storybook, APIs y pruebas cuando sea posible, y adapta la identidad sobre la arquitectura existente, por tandas verificables, empezando por Button, conservando accesibilidad y funcionalidad, y documenta cada decisión. El resultado final debe ser un Storybook personal de nivel portfolio, publicable, reproducible y libre de material confidencial. Si faltan los datos visuales reales, no los inventes ni presentes el trabajo como fiel a Figma.
+
+## Addendum — export CSS autoritativo recibido (22-10-2026)
+
+- `src/design-tokens/figma-tokens.css`: export íntegro y sin retoques manuales de Primitive Root y Semantic `base` / `avila`.
+- `src/design-tokens/export-corrections.css`: neutraliza 6 declaraciones autorreferenciales de peso tipográfico del propio export. Aplica los pesos Primitive equivalentes sin alterar la fuente.
+- `src/design-tokens/legacy-utility-bridge.css`: puente de utilidades CSS existentes a nombres semánticos presentes en el archivo original. No contiene valores de marca propios.
+- Modo `avila`: `--color-theme-background-primary` → `--color-valle-600` (`#1c7c54`); hover → valle-700, pressed → valle-800.
+- Modo `base`: `--color-theme-background-primary` → `--color-blue-600` (`#2563eb`).
+- Familia semántica de ambos modos: `--typography-family-font-family-font` → Poppins.
+- Radio de botón: `--radius-button` → `--size-radius-300` (`12px`).
+- Nota: `--radius-full` en `avila` es `--size-radius-300` (`12px`), distinto al modo `base`; preservarlo como está definido. Para elementos obligatoriamente circulares usar el primitivo `--size-radius-full`.
+- Los colores y dimensiones de componentes sin variable explícita Figma siguen sujetos a revisión; no suponer paridad visual definitiva por haber integrado tokens.
+
+### Política de consumo
+
+1. Componentes nuevos: consumir directamente `var(--color-...semántico)`, `var(--radius-...)` o `var(--size-...)` de `figma-tokens.css`.
+2. Componentes heredados: las clases `*-primary-bg-*` y similares se resuelven a tokens Figma mediante el puente. Migrar progresivamente las clases a nombres de Figma; nunca recuperar el archivo de paleta provisional.
+3. Stories: conmutar `data-theme=avila/base` desde la toolbar; `avila` es el valor inicial.
+4. Verificar con `npm run check:tokens`, `npm run typecheck`, `npm test` y `npm run build-storybook`.

@@ -3,8 +3,8 @@
    transition from its current visual position without timers or snapshots. */
 .t-content-transition {
   --content-transition-duration: var(--motion-duration-surface-in);
-  --content-transition-distance: var(--spacing-small);
-  --content-transition-blur: var(--blur-sm);
+  --content-transition-distance: var(--size-space-200);
+  --content-transition-blur: var(--size-blur-300);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   min-width: 0;
