@@ -26,7 +26,7 @@ components:
 >
 > **Uso:** colocar este documento en la raíz del proyecto y pedir al agente que lo lea completo antes de modificar código. Es a la vez un contrato de diseño y un protocolo de trabajo. Se inspira en la especificación abierta de Google DESIGN.md (versión `alpha`): https://github.com/google-labs-code/design.md.
 >
-> **Autorización:** el ZIP puede contener propiedad intelectual del empleador. No presume licencia de reutilización. Inspeccionar y separar lo autorizado de lo propietario antes de trasladar código, marcas, recursos o datos al portfolio.
+> **Base de implementación:** el usuario declara ser autor de la arquitectura y los componentes del ZIP, informa que él mismo añadió su aviso restrictivo y solicita explícitamente reutilizar el código existente para Ávila DS. **No reconstruir de cero por defecto**: conservar comportamiento, lógica, Storybook, tests y dependencias funcionales, y adaptar alcance e identidad. Antes de publicar, excluir información confidencial, marcas, recursos y datos de negocio ajenos, y verificar los derechos de uso necesarios de cualquier recurso de terceros.
 
 ## Overview
 
@@ -38,10 +38,10 @@ Transformar una implementación existente de Design System + Storybook en **un D
 
 1. **Figma objetivo:** decisiones visuales, familia y anatomía de componentes, variantes, tokens, estados y composición.
 2. **Contrato de comportamiento accesible:** semántica HTML, interacción por teclado, comunicación de estados, soporte a lectores de pantalla y expectativas de usuario.
-3. **ZIP de origen (solo partes reutilizables):** arquitectura, implementación React, patrones reutilizables, lógica, tests, Stories y experiencia de desarrollo.
+3. **ZIP de origen (base técnica prioritaria):** arquitectura, implementación React, patrones reutilizables, lógica, tests, Stories y experiencia de desarrollo. Reutilizar el código aportado según el encargo; limitar públicamente el catálogo a Figma.
 4. **Criterio documentado:** únicamente cuando Figma no especifique algo, elegir una solución consistente y registrar la decisión como inferida.
 
-Ante conflicto entre la UI original del ZIP y la UI de Figma, **Figma manda visualmente** y la solución técnica original sirve de base solo si su reutilización está permitida. Ante conflicto entre una representación visual y la accesibilidad, conservar la intención estética sin sacrificar la interacción accesible.
+Ante conflicto entre la UI original del ZIP y la UI de Figma, **Figma manda visualmente** y la solución técnica original debe conservarse como base funcional siempre que sea compatible. Ante conflicto entre una representación visual y la accesibilidad, conservar la intención estética sin sacrificar la interacción accesible.
 
 ### Archivo de referencia
 
@@ -156,7 +156,7 @@ Decisiones posibles:
 - **SPLIT / MERGE:** el ZIP reúne múltiples patrones bajo una API, o Figma los divide; reorganizar conservando la claridad de la API pública.
 - **NEW:** hay una necesidad documentada en Figma pero no una implementación equivalente en el ZIP; construir como trabajo personal nuevo, priorizando solo patrones útiles.
 - **ARCHIVE:** componente original sin correspondencia o de negocio; excluirlo de Storybook público y de exports públicos.
-- **REBUILD CLEAN:** no existe autorización para reutilizar código; implementar de manera independiente siguiendo la especificación pública y las capacidades observadas.
+- **REBUILD CLEAN:** únicamente para partes concretas imposibles de adaptar, no equivalentes o sujetas a derechos de terceros; no usar esta opción para rehacer indiscriminadamente la biblioteca.
 
 La equivalencia se evalúa por propósito, comportamiento y anatomía, **no por una coincidencia de nombres**. Por ejemplo, `TextInput` puede mapear a `Text Input`; `BottomSheet` NO equivale automáticamente a `Bottom Nav`.
 
@@ -189,7 +189,7 @@ Cada componente incluido debe disponer de:
 **HACER**
 
 - Usar Figma como criterio visual verificable; documentar el origen concreto de cada valor.
-- Preservar calidad arquitectónica y comportamiento accesible del código **solo si se puede reutilizar legalmente**.
+- Preservar la calidad arquitectónica, la semántica y el comportamiento accesible del código aportado por el usuario; reemplazar de forma puntual los recursos que no correspondan al nuevo alcance.
 - Traducir la identidad completa: tokens, iconos, anatomía, estados, layouts, microinteracciones y Storybook, no solo colores.
 - Centralizar decisiones en tokens y asegurar variantes coherentes.
 - Mantener un historial de decisiones e incertidumbres, con evidencia antes/después.
@@ -197,7 +197,7 @@ Cada componente incluido debe disponer de:
 
 **NO HACER**
 
-- Publicar un re-skin del código de la empresa sin derecho de reutilización.
+- Publicar datos privados, marcas corporativas, imágenes licenciadas o lógica sensible fuera del alcance personal.
 - Publicar logotipos, nombres internos, pantallas confidenciales, datos o capturas de la empresa.
 - Reinterpretar libremente la UI objetivo cuando sus medidas sean consultables.
 - Inventar paletas, tipografías, radios, modos o animaciones supuestamente "tomados de Figma".
@@ -212,12 +212,12 @@ Cada componente incluido debe disponer de:
 - Este `DESIGN.md` en la raíz.
 - ZIP con DS + Storybook o repositorio descomprimido.
 - Acceso de solo lectura al Figma objetivo, o export verificable de tokens/estilos/componentes e imágenes de referencia si el conector no está disponible.
-- Confirmación de autorización de reutilización para cualquier pieza del ZIP que se quiera publicar. En ausencia de dicha autorización, tratar el ZIP como referencia privada y reconstruir código original e independiente.
+- El usuario declara ser autor de la base y solicita reutilización directa. Verificar únicamente permisos/licencias de recursos de terceros y que no se filtren secretos, información confidencial ni materiales corporativos ajenos al producto personal.
 
 **Fase 0 — Inspección sin cambios**
 
 1. Auditar `package.json`, versiones, tooling, scripts, estructura, tokens, componentes, stories, tests, licencia y dependencias. No ejecutar scripts desconocidos sin inspeccionarlos.
-2. Clasificar recursos en `autorizado`, `sin autorización confirmada` y `prohibido para publicación`. Excluir la segunda y tercera categoría del bundle público hasta resolver la autorización.
+2. Identificar archivos ajenos al alcance (`negocio`, `marca`, `mock sensible`, `fuentes o assets de terceros`) y excluirlos del Storybook y bundle público, conservando el código base funcional y las dependencias internas requeridas.
 3. Crear `docs/baseline-audit.md`: estructura del repo, rutas, conteos, riesgos, comandos verificables y estado inicial de build/tests.
 4. No modificar la fuente original: usar branch/worktree/copia limpia y documentar operaciones destructivas.
 
@@ -233,7 +233,7 @@ Cada componente incluido debe disponer de:
 
 1. Crear `docs/component-mapping.md` con todas las coincidencias justificadas.
 2. Definir inventario público mínimo, estrategia de tokens, Storybook, naming, API y composición.
-3. Reutilizar stack existente **si es legítimo y compatible**. Si el ZIP utiliza React 19, TypeScript strict, Tailwind v4 CSS-first y Storybook 10, preservar esas convenciones; si utiliza otras versiones, inspeccionar primero y no migrar por reflejo.
+3. Reutilizar stack existente **como prioridad si es compatible**. Si el ZIP utiliza React 19, TypeScript strict, Tailwind v4 CSS-first y Storybook 10, preservar esas convenciones; si utiliza otras versiones, inspeccionar primero y no migrar por reflejo.
 4. No emplear `any` ni casts inseguros por comodidad; mantener types y props consistentes con el repositorio.
 5. Usar componentes accesibles, preferir semántica nativa y evitar duplicar lógica de estados.
 
@@ -267,7 +267,7 @@ Cada componente incluido debe disponer de:
 - [ ] Solo los componentes seleccionados por correspondencia semántica están en la API pública.
 - [ ] Los valores visuales se derivan de Figma y están referenciados en `DESIGN.md`/tokens; los faltantes se documentan como pendientes.
 - [ ] Existe un mapping auditable de ZIP → componente final → página/nodo Figma.
-- [ ] El design system tiene identidad distinta de la del empleador y no incorpora material laboral sin autorización.
+- [ ] El design system utiliza identidad visual propia y no incorpora secretos, recursos de terceros no licenciados ni referencias corporativas que deban eliminarse.
 - [ ] Componentes operativos, Stories utilizables y documentación comprensible.
 - [ ] Tests, lint, typecheck, build y Storybook build verificables, o fallos explícitos con causa.
 - [ ] Visual QA y a11y documentados por componente.
@@ -285,4 +285,4 @@ No declarar éxito sin evidencia. No borrar ni modificar masivamente materiales 
 
 ### Primer encargo al agente
 
-> Lee `DESIGN.md` completo. Analiza el ZIP del DS/Storybook y el archivo Figma indicado. No hagas cambios todavía: produce una auditoría técnica, un inventario de tokens verificables de Figma y una matriz de correspondencia de componentes. Distingue expresamente reutilización legalmente autorizada de código que debe reconstruirse independientemente. Después implementa la nueva identidad sobre la arquitectura permitida, por tandas verificables, empezando por Button, conservando accesibilidad y funcionalidad, y documenta cada decisión. El resultado final debe ser un Storybook personal de nivel portfolio, publicable, reproducible y libre de material confidencial. Si faltan los datos visuales reales, no los inventes ni presentes el trabajo como fiel a Figma.
+> Lee `DESIGN.md` completo. Analiza el ZIP del DS/Storybook y el archivo Figma indicado. No hagas cambios todavía: produce una auditoría técnica, un inventario de tokens verificables de Figma y una matriz de correspondencia de componentes. Prioriza la reutilización directa de la implementación aportada por el usuario, mantén el Storybook, APIs y pruebas cuando sea posible, y adapta la identidad sobre la arquitectura existente, por tandas verificables, empezando por Button, conservando accesibilidad y funcionalidad, y documenta cada decisión. El resultado final debe ser un Storybook personal de nivel portfolio, publicable, reproducible y libre de material confidencial. Si faltan los datos visuales reales, no los inventes ni presentes el trabajo como fiel a Figma.
