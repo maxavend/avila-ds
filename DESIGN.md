@@ -1,15 +1,3 @@
-> **Actualización de tokens (22-10-2026):** el export CSS de Figma está
-> incorporado en `src/design-tokens/figma-tokens.css` como fuente de verdad
-> para Primitive + Semantic (modos `base` y `avila`). Las notas anteriores
-> `POR EXTRAER` sobre **colores, espaciado, radios y tipografía** quedan
-> supersedidas por ese archivo; los detalles geométricos por componente aún
-> requieren revisión visual. No regenerar la paleta provisional.
->
-> **Regla para agentes:** las variables y alias del export adjunto mandan,
-> incluyendo `--radius-full` diferente entre ambos modos. Reutilizar el
-> nombre original en nuevos componentes; `legacy-utility-bridge.css` solo
-> conserva compatibilidad de clases existentes, no autoriza nuevos tokens.
-
 ---
 version: alpha
 name: "Portfolio Design System — identidad basada en Figma"
@@ -25,7 +13,19 @@ components:
 
 # DESIGN.md — Portfolio Design System
 
-> **Estado:** especificación inicial basada en la estructura de Figma ya inspeccionada. No constituye una extracción integral de sus tokens. **Completar las secciones marcadas `POR EXTRAER` antes de ejecutar la transformación visual definitiva.**
+> **Actualización de tokens (22-10-2026):** el export CSS de Figma está
+> incorporado en `src/design-tokens/figma-tokens.css` como fuente de verdad
+> para Primitive + Semantic (modos `base` y `avila`). Las notas anteriores
+> `POR EXTRAER` sobre **colores, espaciado, radios y tipografía** quedan
+> supersedidas por ese archivo; los detalles geométricos por componente aún
+> requieren revisión visual. No regenerar la paleta provisional.
+>
+> **Regla para agentes:** las variables y alias del export adjunto mandan,
+> incluyendo `--radius-full` diferente entre ambos modos. Reutilizar el
+> nombre original en nuevos componentes; `legacy-utility-bridge.css` solo
+> conserva compatibilidad de clases existentes, no autoriza nuevos tokens.
+
+> **Estado:** tokens Primitive + Semantic recibidos e integrados. La correspondencia visual de geometrías, variantes y componentes todavía requiere auditoría. Los datos proporcionados en el export CSS no deben volver a considerarse pendientes.
 >
 > **Uso:** colocar este documento en la raíz del proyecto y pedir al agente que lo lea completo antes de modificar código. Es a la vez un contrato de diseño y un protocolo de trabajo. Se inspira en la especificación abierta de Google DESIGN.md (versión `alpha`): https://github.com/google-labs-code/design.md.
 >
@@ -52,7 +52,7 @@ Ante conflicto entre la UI original del ZIP y la UI de Figma, **Figma manda visu
 - File key: `vJS4Ozok1qKFmRoBbtlNda`
 - Tipo de archivo: biblioteca de diseño con páginas temáticas de componentes.
 - Evidencia comprobada: estructura de páginas y matriz de componentes Button (ver sección Components).
-- **POR EXTRAER**: nombre comercial de la biblioteca, estilos de color, variables, tipografías, iconografía precisa, radios, elevaciones y detalles de cada componente. No atribuir valores no observados.
+- **VERIFICADO DESDE EXPORT CSS**: primitivas y variables semánticas de color, espaciado, tipografía y radios para `base` y `avila`. **POR EXTRAER**: iconografía exacta, sombras compuestas, propiedades visuales y anatomía de cada componente en Figma. No atribuir valores no observados.
 
 ### Identidad a transmitir
 
@@ -64,37 +64,42 @@ No migrar todos los componentes por inercia. Trabajar sobre la **intersección s
 
 ## Colors
 
-**POR EXTRAER — datos reales de Figma.** El archivo aún no contiene una paleta certificada. Al obtener acceso:
+**Fuente de verdad verificada:** `src/design-tokens/figma-tokens.css` (export CSS íntegro del usuario). No usar paletas anteriores.
 
-1. Leer colecciones de variables de color, modos (por ejemplo light/dark solo si existen), alias, paint styles y valores de fills y strokes representativos.
-2. Construir una tabla de tokens `primitives → semantic → component`; respetar sus nombres cuando correspondan a roles semánticos y documentar cualquier traducción a nombres CSS.
-3. Diferenciar superficies, texto, bordes, iconos, foco, hover, pressed, disabled, loading y estados de feedback si existen.
-4. Registrar cada valor con su **fuente precisa** (`collection/variable/mode` o `page/node/property`). No deducir colores de capturas cuando se disponga del valor de origen.
-5. Incorporar aquí un bloque YAML `colors:` conforme a DESIGN.md y eliminar `colors` de `omitted` al completar y verificar la extracción.
+- **Primitive:** familias `grey`, `blue`, `green`, `orange`, `yellow`, `red`, `purple`, `valle` y transparencias blancas/negras.
+- **Semantic Base:** `--color-theme-background-primary` → `--color-blue-600` (`#2563eb`).
+- **Semantic Ávila:** `--color-theme-background-primary` → `--color-valle-600` (`#1c7c54`).
+- Hover en Ávila: `--color-theme-background-hover` → `--color-valle-700` (`#176547`).
+- Pressed en Ávila: `--color-theme-background-pressed` → `--color-valle-800` (`#14513a`).
+- Los roles semánticos se organizan en Background, Icon, Text, Border y Shadows; consultar el export para las entradas exactas.
+- Alternancia de modo mediante `data-theme="avila"` o `data-theme="base"`. Ávila es el default de Storybook.
 
-**Regla de implementación:** los componentes consumen tokens semánticos; los valores HEX, RGB u OKLCH solo existen en las definiciones de tokens, no dispersos como literales dentro de los componentes. Mantener los modos presentes en la fuente. No inventar un tema dark que Figma no haya definido.
+**Regla de implementación:** consumir los nombres oficiales `var(--color-theme-...)`, `var(--color-neutral-...)` o estados específicos (`red`, `yellow`, `blue`, etc.). Las familias anteriores `--color-primary-bg-*` existen solo como adaptador temporal y se resuelven al export original: no usarlas para nuevas implementaciones. HEX exclusivamente dentro del export.
+
+**Pendiente de comprobación visual:** cómo se aplican esos roles a la anatomía y estados de cada componente. Un token semántico disponible no implica que todos los componentes lo usen.
 
 ## Typography
 
-**POR EXTRAER — datos reales de Figma.** Registrar:
+- **Familia semántica:** `--typography-family-font-family-font` → `--typography-family-font-poppins`; Poppins es la tipografía predeterminada en ambos modos.
+- El export Primitive también enumera DM Sans, Montserrat y Open Sans; su existencia **no implica** que se utilicen como familia semántica activa.
+- Tamaños Primitive: `--typography-font-size-2xs` a `--typography-font-size-9xl` (10px a 128px según los valores exactos del export).
+- Pesos Primitive: 100–900; Semantic declara Regular, Medium y Semibold. Las seis autoreferencias del export quedan normalizadas con la corrección mínima descrita en `docs/tokens.md`.
+- Line heights: `--typography-line-height-100` a `--typography-line-height-1300` (ver export). No deducir interlineado únicamente de tamaño de fuente.
+- Las clases Tailwind existentes de fuente/tamaño han sido enlazadas a estas primitivas en `design-system-tailwind.css`.
 
-- Familias, fallbacks, disponibilidad y condiciones de uso/licencia de fuentes.
-- Tamaños, pesos, alturas de línea, tracking, capitalización y jerarquías.
-- Roles `display / heading / body / label / caption` solo si su estructura está respaldada por Figma; de lo contrario, usar nombres reales de estilos.
-- Tratamiento de truncamiento, wrapping, números tabulares, errores y contenido de longitud variable.
-
-Generar tokens tipográficos en YAML (`typography:`) con `fontFamily`, `fontSize`, `fontWeight`, `lineHeight` y `letterSpacing` **solo con valores verificados**. Eliminar `typography` de `omitted` al completar. No copiar automáticamente la tipografía del sistema de origen.
+**Pendiente:** confirmar con nodos Figma reales el uso de tracking, jerarquías display/heading, truncamiento y font weights en cada componente. No inferir propiedades ausentes del CSS suministrado.
 
 ## Layout
 
-**POR EXTRAER — medidas reales.**
+**Escala Primitive verificada; pendientes las medidas de Auto Layout por componente.**
 
-- Obtener spacing, padding, gaps, constraints, min/max width, tamaños intrínsecos y comportamiento de Auto Layout de Figma.
+- Usar `--size-space-*` del export: 0, 1, 2, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96 y 128 px, más entradas negativas. Observar nombres y valores exactos del archivo fuente.
+- Obtener **por componente** sus paddings, gaps, constraints, min/max width, tamaños intrínsecos y comportamiento de Auto Layout de Figma.
 - Distinguir **dimensión de ejemplo** de **regla de componente**: una muestra de 200 px de ancho no significa que todos los botones deban medir 200 px.
 - Describir el layout responsivo por comportamiento, no limitarlo a un conjunto de breakpoints arbitrarios. Los componentes deben adaptarse al contenedor y al contenido.
 - No perder soporte de textos largos, zoom 200–400 %, internacionalización ni targets táctiles adecuados.
 - No fijar alturas arbitrarias en campos de texto multilinea o contenido dinámico.
-- Crear tokens YAML `spacing:` y retirarlo de `omitted` una vez verificados.
+- No duplicar escalas en YAML: la implementación consume `--size-space-*` directamente de `figma-tokens.css`.
 
 **Reglas en React/CSS:** preferir tokens + CSS Grid/Flex y dimensionado intrínseco; evitar coordenadas absolutas para composición normal; respetar propiedades `min-width`, `flex-wrap`, `overflow` y `box-sizing` de cada patrón.
 
@@ -106,9 +111,11 @@ Inventariar shadow styles, blur, opacidad, bordes, overlays, estados elevados y 
 
 ## Shapes
 
-**POR EXTRAER — geometrías reales.**
+**Primitivas de radios y strokes verificadas; pendientes las geometrías particulares.**
 
-Medir radios, stroke widths, proporciones, iconos, tamaño visual e hit areas; distinguir círculos perfectos, pills, rectángulos redondeados y bordes de estados. Registrar `rounded:` en YAML al disponer de valores fiables y retirarlo de `omitted`. Mantener coherencia entre subcomponentes y variants; no usar el mismo radio para todos por conveniencia.
+Radios Primitive: `--size-radius-0`, `100`, `150`, `200`, `300`, `400`, `600` y `full`. Radio de Button: `--radius-button` → `--size-radius-300` (12px). Stroke: `--size-stroke-border` (1px) y `--size-stroke-border-bold` (2px). En modo Ávila, `--radius-full` = 12px **por definición del export**; un avatar circular debe usar `--size-radius-full`.
+
+Queda por medir geometrías, proporciones, iconos, hit areas y bordes de estados por nodo. Mantener coherencia entre subcomponentes, sin imponer un único radio por comodidad.
 
 ### Iconografía y otros recursos
 
@@ -229,8 +236,8 @@ Cada componente incluido debe disponer de:
 1. Levantar inventario real de componentes, variantes, propiedades, nodos y referencias visuales para los candidatos seleccionados.
 2. Recuperar variables, modos, aliases, estilos tipográficos, paint/effect styles y medidas. Resolver referencias de alias hasta el valor final para cada modo.
 3. Construir `docs/figma-token-audit.md`, citando `collection/variable/mode` o `node/property`; incluir unidades y nivel de confianza.
-4. Completar los bloques de tokens `colors`, `typography`, `spacing`, `rounded` y `components` de este archivo **con valores reales** y retirar las entradas correspondientes de `omitted`.
-5. Si Figma no es accesible (por permisos, límite del conector u otro motivo), no afirmar que hubo extracción: conservar `POR EXTRAER`, solicitar o localizar material exportado válido y continuar solo con tareas técnicas que no dependan de ese dato.
+4. Los valores de color, tipografía, spacing y rounded **ya están aportados** en el export CSS. Documentar únicamente el uso real y la trazabilidad `token → componente/estado`; no inventar nuevos valores ni volver a recrear la paleta.
+5. Si el conector Figma no está disponible, utilizar el export CSS proporcionado como fuente válida de tokens; mantener pendientes solo las propiedades y medidas por componente no contenidas en él.
 
 **Fase 2 — Selección y arquitectura**
 
@@ -290,7 +297,7 @@ No declarar éxito sin evidencia. No borrar ni modificar masivamente materiales 
 
 > Lee `DESIGN.md` completo. Analiza el ZIP del DS/Storybook y el archivo Figma indicado. No hagas cambios todavía: produce una auditoría técnica, un inventario de tokens verificables de Figma y una matriz de correspondencia de componentes. Prioriza la reutilización directa de la implementación aportada por el usuario, mantén el Storybook, APIs y pruebas cuando sea posible, y adapta la identidad sobre la arquitectura existente, por tandas verificables, empezando por Button, conservando accesibilidad y funcionalidad, y documenta cada decisión. El resultado final debe ser un Storybook personal de nivel portfolio, publicable, reproducible y libre de material confidencial. Si faltan los datos visuales reales, no los inventes ni presentes el trabajo como fiel a Figma.
 
-## Addendum — export CSS autoritativo recibido (22-10-2026)
+## Anexo técnico — export CSS autoritativo recibido (22-10-2026)
 
 - `src/design-tokens/figma-tokens.css`: export íntegro y sin retoques manuales de Primitive Root y Semantic `base` / `avila`.
 - `src/design-tokens/export-corrections.css`: neutraliza 6 declaraciones autorreferenciales de peso tipográfico del propio export. Aplica los pesos Primitive equivalentes sin alterar la fuente.
