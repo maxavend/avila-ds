@@ -1,0 +1,9 @@
+@layer properties, theme, base, avila-ds, components, utilities;
+@import "tailwindcss" source(none);
+@source "../src";
+@import "./design-tokens/figma-tokens.css";
+@import "./design-tokens/export-corrections.css";
+@import "./design-tokens/legacy-utility-bridge.css";
+@import "./styles/design-system-tailwind.css";
+@import "./styles/design-system.css";
+body { font-family: var(--typography-family-font-family-font); }

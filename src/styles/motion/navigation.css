@@ -1,0 +1,58 @@
+/* Native navigation surfaces. State remains owned by their existing consumers. */
+
+.t-bottom-navbar-menu {
+  visibility: visible;
+  pointer-events: auto;
+  transition: visibility 0s linear 0s;
+}
+
+.t-bottom-navbar-menu[data-open='false'] {
+  visibility: hidden;
+  pointer-events: none;
+  transition-delay: var(--motion-duration-overlay-out);
+}
+
+.t-bottom-navbar-menu[data-open='true'] {
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+.t-bottom-navbar-menu-backdrop {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-overlay-out) var(--ease-orion-content);
+}
+
+.t-bottom-navbar-menu[data-open='true'] .t-bottom-navbar-menu-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+  transition-duration: var(--motion-duration-overlay-in);
+}
+
+.t-bottom-navbar-menu-surface {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition:
+    opacity var(--motion-duration-overlay-out) var(--ease-orion-content),
+    transform var(--motion-duration-overlay-out) var(--ease-orion-content);
+}
+
+.t-bottom-navbar-menu[data-open='true'] .t-bottom-navbar-menu-surface {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition-duration: var(--motion-duration-overlay-in);
+}
+
+@starting-style {
+  .t-bottom-navbar-menu[data-open='true'] .t-bottom-navbar-menu-backdrop {
+    opacity: 0;
+  }
+
+  .t-bottom-navbar-menu[data-open='true'] .t-bottom-navbar-menu-surface {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}

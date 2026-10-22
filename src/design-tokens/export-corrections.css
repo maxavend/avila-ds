@@ -1,0 +1,10 @@
+/* CSS-export normalization: these are literal self-references in both Semantic modes.
+   The immutable Figma export remains in figma-tokens.css. We restore the
+   values explicitly given by the Primitive collection, without redefining
+   any other user-supplied token. */
+[data-theme="base"],
+[data-theme="avila"] {
+  --typography-font-weight-regular: 400;
+  --typography-font-weight-medium: 500;
+  --typography-font-weight-semibold: 600;
+}
