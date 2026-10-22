@@ -30,8 +30,8 @@ export interface DropdownProps extends Omit<React.HTMLAttributes<HTMLDivElement>
 
 // ─── Static placeholder items ──────────────────────────────────────────────
 
-const PLACEHOLDER_ITEMS_L = ['Ávila Hogar 200 Mbps', 'Ávila Hogar 400 Mbps', 'Ávila Móvil Plan S', 'Ávila Móvil Plan M', 'Ávila TV Total', 'Ávila TV Básico'];
-const PLACEHOLDER_ITEMS_M = ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4', 'Opción 5', 'Opción 6'];
+const PLACEHOLDER_ITEMS_L = ['Preferencias', 'Mi perfil', 'Configuración', 'Notificaciones', 'Privacidad', 'Ayuda'];
+const PLACEHOLDER_ITEMS_M = ['Opción A', 'Opción B', 'Opción C', 'Opción D', 'Opción E', 'Opción F'];
 
 // ─── Component ────────────────────────────────────────────────────────────────
 

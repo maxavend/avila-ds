@@ -3,7 +3,7 @@
 - Catálogo Figma observado: **38** tipos/páginas (sin familias de assets).
 - Equivalencias preliminares con implementación existente: **32**.
 - Código runtime reutilizado: **52** archivos fuente TypeScript/TSX, contando dependencias internas.
-- Nuevas stories de integración: **11**.
+- Nuevas stories de integración: **32**.
 - Tokens visuales Figma: **no verificados** (límite de la conexión).
 - Verificación runtime: requiere instalar dependencias y ejecutar `typecheck` y `build-storybook`.
 
