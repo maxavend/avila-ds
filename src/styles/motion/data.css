@@ -1,0 +1,38 @@
+/* Native data-display transitions. */
+
+.t-bar-chart-tooltip {
+  visibility: hidden;
+  transition: visibility 0s linear var(--motion-duration-tooltip-out);
+}
+
+.t-bar-chart-tooltip[data-open='true'],
+.t-bar-chart-bar-root:focus-within .t-bar-chart-tooltip[data-has-value='true'] {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.t-bar-chart-tooltip-surface {
+  opacity: 0;
+  transform: translateY(4px) scale(0.9);
+  transition:
+    opacity var(--motion-duration-tooltip-out) var(--ease-orion-content),
+    transform var(--motion-duration-tooltip-out) var(--ease-orion-content);
+}
+
+.t-bar-chart-tooltip[data-open='true'] .t-bar-chart-tooltip-surface,
+.t-bar-chart-bar-root:focus-within .t-bar-chart-tooltip[data-has-value='true'] .t-bar-chart-tooltip-surface {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity var(--motion-duration-feedback) var(--ease-orion-content),
+    transform var(--motion-duration-feedback) var(--ease-orion-content);
+  transition-delay: var(--motion-delay-tooltip);
+}
+
+@starting-style {
+  .t-bar-chart-tooltip[data-open='true'] .t-bar-chart-tooltip-surface,
+  .t-bar-chart-bar-root:focus-within .t-bar-chart-tooltip[data-has-value='true'] .t-bar-chart-tooltip-surface {
+    opacity: 0;
+    transform: translateY(4px) scale(0.9);
+  }
+}

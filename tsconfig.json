@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext", "moduleResolution": "Bundler", "jsx": "react-jsx",
+    "strict": true, "allowSyntheticDefaultImports": true, "esModuleInterop": true,
+    "skipLibCheck": true, "resolveJsonModule": true, "noEmit": true,
+    "types": ["vite/client"], "useDefineForClassFields": true
+  },
+  "include": ["src", ".storybook", "vite.config.ts"]
+}

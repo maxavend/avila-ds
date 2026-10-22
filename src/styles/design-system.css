@@ -1,0 +1,1694 @@
+@import "../design-tokens/primitive.css";
+@import "../design-tokens/avila-theme.css";
+@import "./motion/calendar.css";
+@import "./motion/media.css";
+@import "./motion/navigation.css";
+@import "./motion/data.css";
+@import "./motion/content.css";
+
+/* Package-safe component foundation. It intentionally excludes brand font files,
+   optional theme overrides and application-shell selectors. */
+
+/* Lottie/theme bridge used by public assets. */
+[aria-label="THEME_PRIMARY"] path,
+[aria-label="THEME_PRIMARY"] rect {
+  fill: var(--color-primary-bg-default) !important;
+  stroke: var(--color-primary-bg-default) !important;
+}
+
+[aria-label="THEME_STROKE"] path,
+[aria-label="THEME_STROKE"] rect {
+  fill: var(--color-neutral-text-headline) !important;
+  stroke: var(--color-neutral-text-headline) !important;
+}
+
+[aria-label="THEME_WHITE"] path,
+[aria-label="THEME_WHITE"] rect {
+  fill: var(--color-neutral-bg-surface-level-2) !important;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-border-subtle) transparent;
+}
+
+/* Public focus recipe for blocks built outside the library. Matches the
+   ring-2 + offset-2 treatment of Button and IconButton; the inset variant
+   serves clipped containers such as tabs or list rows. Plain CSS so the
+   compiled package ships it without depending on consumer Tailwind scans. */
+.focus-ring:focus-visible,
+.focus-ring-inset:focus-visible {
+  outline: 2px solid var(--color-effect-focus-primary);
+  outline-offset: 2px;
+}
+
+.focus-ring-inset:focus-visible {
+  outline-offset: -2px;
+}
+
+/* Shared control feedback keeps color properties and opacity independently
+   composable. Focus and disabled states resolve immediately so a state change
+   never leaves a control visually half transitioned. */
+.t-control-colors {
+  transition:
+    color var(--motion-duration-feedback) var(--ease-orion-content),
+    background-color var(--motion-duration-feedback) var(--ease-orion-content),
+    border-color var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-control-opacity {
+  transition: opacity var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-control-colors.t-control-opacity {
+  transition:
+    color var(--motion-duration-feedback) var(--ease-orion-content),
+    background-color var(--motion-duration-feedback) var(--ease-orion-content),
+    border-color var(--motion-duration-feedback) var(--ease-orion-content),
+    opacity var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-control-colors:is(:focus-visible, :disabled, [aria-disabled='true'], [data-disabled], [inert]),
+.t-control-opacity:is(:focus-visible, :disabled, [aria-disabled='true'], [data-disabled], [inert]),
+[inert] .t-control-colors,
+[inert] .t-control-opacity {
+  transition: none !important;
+}
+
+/* Input-like controls retain semantic color feedback while validation remains
+   a stable layout state; no automatic movement is attached to the error flag. */
+.t-input {
+  transition: border-color var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-input:is(:focus-within, :disabled, [aria-disabled='true'], [data-disabled]),
+.t-input:has(input:disabled, textarea:disabled, select:disabled) {
+  transition: none !important;
+}
+
+/* Switch thumb movement follows the binary state without a bounce. */
+.t-toggle-track {
+  --switch-toggle-track-dur: var(--motion-duration-toggle);
+  --switch-toggle-travel: 20px;
+  --switch-toggle-ease: var(--ease-orion-content);
+  transition: background-color var(--switch-toggle-track-dur) var(--switch-toggle-ease);
+}
+
+.t-toggle-thumb {
+  translate: 0 0;
+  transition: translate var(--switch-toggle-track-dur) var(--switch-toggle-ease);
+}
+
+.peer:disabled + .t-toggle-track,
+.peer:disabled + .t-toggle-track .t-toggle-thumb,
+.peer:focus-visible + .t-toggle-track,
+.peer:focus-visible + .t-toggle-track .t-toggle-thumb,
+.t-toggle-track:is(:focus-visible, [aria-disabled='true'], [data-disabled], [inert]),
+.t-toggle-track:is(:focus-visible, [aria-disabled='true'], [data-disabled], [inert]) .t-toggle-thumb,
+[inert] .t-toggle-track,
+[inert] .t-toggle-thumb {
+  transition: none !important;
+}
+
+/* Stepper indicators keep every glyph mounted so state changes can cross-fade
+   in place without changing the bubble's geometry. */
+.t-stepper-step {
+  transition:
+    background-color var(--motion-duration-feedback) var(--ease-orion-content),
+    border-color var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-stepper-icon-swap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.t-stepper-icon-swap-item {
+  display: grid;
+  grid-area: 1 / 1;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: scale(0.25);
+  transition:
+    opacity var(--motion-duration-feedback) var(--ease-orion-content),
+    transform var(--motion-duration-feedback) var(--ease-orion-content);
+  pointer-events: none;
+}
+
+.t-stepper-icon-swap[data-state='Active'] .t-stepper-icon-swap-item[data-icon='number'],
+.t-stepper-icon-swap[data-state='Disabled'] .t-stepper-icon-swap-item[data-icon='number'],
+.t-stepper-icon-swap[data-state='Complete'] .t-stepper-icon-swap-item[data-icon='check'],
+.t-stepper-icon-swap[data-state='Success'] .t-stepper-icon-swap-item[data-icon='check'],
+.t-stepper-icon-swap[data-state='Error'] .t-stepper-icon-swap-item[data-icon='error'] {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.t-toggle-track[data-on='true'] .t-toggle-thumb {
+  translate: var(--switch-toggle-travel) 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-toggle-track {
+    transition: none !important;
+  }
+
+  .t-toggle-thumb {
+    transition: none !important;
+  }
+}
+
+/* Bottom navigation uses one persistent indicator so selection moves between
+   tabs instead of unmounting and remounting a circle inside each tab. */
+.t-bottom-navbar-indicator {
+  --bottom-navbar-indicator-dur: var(--motion-duration-indicator);
+  --bottom-navbar-indicator-ease: var(--ease-orion-content);
+  transition: transform var(--bottom-navbar-indicator-dur) var(--bottom-navbar-indicator-ease);
+}
+
+.t-bottom-navbar-tab-icon {
+  transform: translateY(0);
+  transition:
+    transform var(--bottom-navbar-indicator-dur, var(--motion-duration-indicator)) var(--bottom-navbar-indicator-ease, var(--ease-orion-content)),
+    color var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-bottom-navbar-tab-icon[data-active='true'] {
+  transform: translateY(-14px);
+}
+
+.t-bottom-navbar-tab-label {
+  transition: color var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-dots-indicator-dot {
+  transition:
+    width var(--motion-duration-indicator) var(--ease-orion-content),
+    background-color var(--motion-duration-indicator) var(--ease-orion-content);
+}
+
+/* Sidebar expansion keeps the shell and its identity stable while the
+   secondary content fades in/out inside the available width. */
+.t-sidebar {
+  --sidebar-shell-dur: var(--motion-duration-resize);
+  width: var(--sidebar-width);
+  transition: width var(--sidebar-shell-dur) var(--ease-orion-content);
+}
+
+.t-sidebar-submenu {
+  --sidebar-submenu-dur: var(--motion-duration-disclosure);
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-rows var(--sidebar-submenu-dur) var(--ease-orion-content),
+    opacity var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-sidebar-submenu[data-state='closed'] {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+.t-sidebar-submenu > div {
+  min-height: 0;
+  overflow: hidden;
+  padding-block-start: 0;
+  opacity: 0;
+  transform: translate3d(0, -6px, 0);
+  transition:
+    padding-block-start var(--sidebar-submenu-dur) var(--ease-orion-content),
+    opacity var(--motion-duration-feedback) var(--ease-orion-content),
+    transform var(--sidebar-submenu-dur) var(--ease-orion-content);
+}
+
+.t-sidebar-submenu[data-state='open'] > div {
+  padding-block-start: var(--spacing-1);
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0ms, 35ms, 0ms;
+}
+
+.t-sidebar-leading-icon {
+  flex: 0 0 20px;
+  width: 20px;
+}
+
+.t-sidebar-expanded-content {
+  --sidebar-content-dur: var(--motion-duration-resize);
+  max-width: 220px;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    max-width var(--sidebar-content-dur) var(--ease-orion-content) 0ms,
+    opacity var(--motion-duration-feedback) var(--ease-orion-content) 70ms,
+    transform var(--sidebar-content-dur) var(--ease-orion-content) 0ms;
+}
+
+.t-sidebar-expanded-content[data-collapsed='true'] {
+  max-width: 0;
+  opacity: 0;
+  transform: translate3d(-8px, 0, 0);
+  pointer-events: none;
+  transition:
+    max-width var(--sidebar-content-dur) var(--ease-orion-content) 0ms,
+    opacity var(--motion-duration-feedback) var(--ease-orion-content) 0ms,
+    transform var(--sidebar-content-dur) var(--ease-orion-content) 0ms;
+}
+
+.t-sidebar-badge {
+  opacity: 0;
+  transform: scale(0.65);
+  transform-origin: center;
+  pointer-events: none;
+  transition:
+    opacity var(--motion-duration-feedback) var(--ease-orion-content),
+    transform var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-sidebar-badge[data-visible='true'] {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 120ms;
+}
+
+.t-sidebar-badge[data-visible='false'] {
+  transition-delay: 0ms;
+}
+
+.t-sidebar-chevron {
+  transition: transform var(--motion-duration-toggle) var(--ease-orion-content);
+}
+
+.t-sidebar-user-info {
+  max-width: 220px;
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    max-width var(--motion-duration-resize) var(--ease-orion-content),
+    opacity var(--motion-duration-feedback) var(--ease-orion-content),
+    transform var(--motion-duration-resize) var(--ease-orion-content);
+}
+
+.t-sidebar-user-info[data-visible='false'] {
+  max-width: 0;
+  opacity: 0;
+  transform: translateX(-8px);
+  pointer-events: none;
+}
+
+/* Navbar dropdowns reveal as one surface while their content cascades.
+   The component owns the open state through
+   data-open; CSS owns the visual choreography. */
+.t-navbar-panel-host {
+  overflow: hidden;
+}
+
+.t-navbar-topbar {
+  height: 36px;
+  overflow: visible;
+}
+
+.t-navbar-topbar[data-mobile-open='true'] {
+  height: 0;
+  overflow: hidden;
+}
+
+.t-navbar-backdrop {
+  --navbar-backdrop-open-dur: var(--motion-duration-overlay-in);
+  --navbar-backdrop-close-dur: var(--motion-duration-overlay-out);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--navbar-backdrop-close-dur) var(--ease-orion-content);
+}
+
+.t-navbar-backdrop[data-open='true'] {
+  opacity: 1;
+  pointer-events: auto;
+  transition-duration: var(--navbar-backdrop-open-dur);
+}
+
+.t-navbar-mobile-backdrop {
+  --navbar-mobile-open-dur: var(--motion-duration-overlay-in);
+  --navbar-mobile-close-dur: var(--motion-duration-overlay-out);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--navbar-mobile-close-dur) var(--ease-orion-content);
+}
+
+.t-navbar-mobile-backdrop[data-open='true'] {
+  opacity: 1;
+  pointer-events: auto;
+  transition-duration: var(--navbar-mobile-open-dur);
+}
+
+.t-navbar-mobile-menu {
+  --navbar-mobile-open-dur: var(--motion-duration-overlay-in);
+  --navbar-mobile-close-dur: var(--motion-duration-overlay-out);
+  --navbar-mobile-item-dur: var(--motion-duration-child);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition:
+    opacity var(--navbar-mobile-close-dur) var(--ease-orion-content),
+    transform var(--navbar-mobile-close-dur) var(--ease-orion-content);
+}
+
+.t-navbar-mobile-menu[data-open='true'] {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition-duration: var(--navbar-mobile-open-dur);
+}
+
+@starting-style {
+  .t-navbar-mobile-backdrop[data-open='true'] {
+    opacity: 0;
+  }
+
+  .t-navbar-mobile-menu[data-open='true'] {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+.t-navbar-mobile-footer {
+  opacity: 0;
+  transition: opacity var(--motion-duration-child) var(--ease-orion-content);
+}
+
+.t-navbar-mobile-menu[data-open='true'] .t-navbar-mobile-footer {
+  opacity: 1;
+  transition-delay: var(--motion-delay-stagger-max);
+}
+
+.t-navbar-panel-surface {
+  background-color: var(--color-neutral-bg-surface-level-2);
+  border-bottom: 1px solid var(--color-neutral-border-subtle);
+  box-shadow: var(--shadow-dropdown);
+}
+
+.t-navbar-panel-content {
+  overflow: hidden;
+}
+
+.t-navbar-tab-stroke {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--motion-duration-child) var(--ease-orion-content);
+  pointer-events: none;
+}
+
+button:not(:disabled):hover > .t-navbar-tab-stroke,
+button:not(:disabled):focus-visible > .t-navbar-tab-stroke,
+button:not(:disabled) > .t-navbar-tab-stroke[data-hover='true'] {
+  transform: scaleX(1);
+}
+
+.t-navbar-tab-chevron {
+  transition: transform var(--motion-duration-toggle) var(--ease-orion-content), color var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-topbar-dropdown {
+  --topbar-dropdown-open-dur: var(--motion-duration-child);
+  --topbar-dropdown-close-dur: var(--motion-duration-surface-out);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px) scale(0.98);
+  transform-origin: top right;
+  visibility: hidden;
+  transition:
+    opacity var(--topbar-dropdown-close-dur) var(--ease-orion-content),
+    transform var(--topbar-dropdown-close-dur) var(--ease-orion-content),
+    visibility 0s linear var(--topbar-dropdown-close-dur);
+}
+
+.t-topbar-dropdown[data-open='true'] {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+  visibility: visible;
+  transition:
+    opacity var(--topbar-dropdown-open-dur) var(--ease-orion-content),
+    transform var(--topbar-dropdown-open-dur) var(--ease-orion-content),
+    visibility 0s linear 0s;
+}
+
+@starting-style {
+  .t-topbar-dropdown[data-open='true'] {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+    visibility: hidden;
+  }
+}
+
+.t-navbar-mobile-submenu {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--motion-duration-disclosure) var(--ease-orion-content);
+}
+
+.t-navbar-mobile-submenu[data-state='open'] {
+  grid-template-rows: 1fr;
+}
+
+.t-navbar-mobile-submenu-content {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.t-segmented-control-indicator {
+  inset-block: 4px;
+  left: 0;
+  pointer-events: none;
+  transform-origin: left center;
+  transition:
+    transform var(--motion-duration-indicator) var(--ease-orion-content),
+    width var(--motion-duration-indicator) var(--ease-orion-content);
+}
+
+.t-segmented-control-indicator[data-ready='false'],
+.t-segmented-control-indicator[data-animate='false'] {
+  transition: none;
+}
+
+/* Tabs keep one indicator mounted so selection moves continuously between
+   buttons instead of replacing an underline inside each active tab. */
+.t-tabs-indicator {
+  --tabs-indicator-dur: var(--motion-duration-indicator);
+  --tabs-indicator-ease: var(--ease-orion-content);
+  transition:
+    transform var(--tabs-indicator-dur) var(--tabs-indicator-ease),
+    width var(--tabs-indicator-dur) var(--tabs-indicator-ease),
+    opacity var(--motion-duration-feedback) var(--tabs-indicator-ease);
+}
+
+.t-tabs-indicator[data-ready='false'] {
+  opacity: 0;
+  transition: none;
+}
+
+.t-tabs-indicator[data-animate='false'] {
+  transition: none;
+}
+
+.t-tabs-tab {
+  transition:
+    color var(--motion-duration-feedback) var(--ease-orion-content),
+    background-color var(--motion-duration-feedback) var(--ease-orion-content),
+    border-color var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+/* The contained selection color sweeps inside each pill. Keeping this layer
+   clipped by the tab prevents the active surface from travelling through the
+   gaps between buttons. */
+.t-tabs-tab-contained::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  content: '';
+  pointer-events: none;
+  transform: translateX(101%);
+  transition: transform var(--motion-duration-indicator) var(--ease-orion-content);
+}
+
+.t-tabs-tab-contained-primary::before {
+  background-color: var(--color-primary-bg-soft);
+}
+
+.t-tabs-tab-contained-secondary::before {
+  background-color: var(--color-secondary-bg-soft);
+}
+
+.t-tabs-tab-contained[aria-selected='true']::before {
+  transform: translateX(0);
+}
+
+/* Pills after the selected tab keep their color layer on the left. Pills
+   before it use the default right-hand position, so entry and exit follow the
+   direction of travel without duplicating selection state in JavaScript. */
+.t-tabs-tab-contained[aria-selected='true'] ~ .t-tabs-tab-contained::before {
+  transform: translateX(-101%);
+}
+
+.t-navbar-panel {
+  --navbar-panel-open-dur: var(--motion-duration-overlay-in);
+  --navbar-panel-close-dur: var(--motion-duration-overlay-out);
+  --navbar-panel-item-dur: var(--motion-duration-child);
+  --navbar-panel-stagger: var(--motion-delay-stagger-step);
+  --navbar-panel-translate-y: -12px;
+  --navbar-panel-item-translate-y: -8px;
+  --navbar-panel-ease: var(--ease-orion-content);
+  height: 0;
+  opacity: 0;
+  transform: translateY(var(--navbar-panel-translate-y));
+  pointer-events: none;
+  transition:
+    height var(--navbar-panel-close-dur) var(--navbar-panel-ease),
+    opacity var(--navbar-panel-close-dur) var(--navbar-panel-ease),
+    transform var(--navbar-panel-close-dur) var(--navbar-panel-ease);
+}
+
+.t-navbar-panel[data-open='true'] {
+  height: var(--navbar-panel-content-height);
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-duration: var(--navbar-panel-open-dur);
+}
+
+@starting-style {
+  .t-navbar-panel[data-open='true'] {
+    height: 0;
+    opacity: 0;
+    transform: translateY(var(--navbar-panel-translate-y));
+  }
+}
+
+.t-navbar-panel-item {
+  opacity: 0;
+  transform: translateY(var(--navbar-panel-item-translate-y));
+  transition:
+    opacity var(--navbar-panel-item-dur) var(--navbar-panel-ease),
+    transform var(--navbar-panel-item-dur) var(--navbar-panel-ease);
+  transition-delay: 0ms;
+}
+
+.t-navbar-panel[data-open='true'] .t-navbar-panel-item {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: min(calc(var(--navbar-panel-stagger) * var(--navbar-panel-index)), 170ms);
+}
+
+@starting-style {
+  .t-navbar-panel[data-open='true'] .t-navbar-panel-item {
+    opacity: 0;
+    transform: translateY(var(--navbar-panel-item-translate-y));
+  }
+}
+
+.t-navbar-mobile-item {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity var(--navbar-mobile-item-dur) var(--ease-orion-content),
+    transform var(--navbar-mobile-item-dur) var(--ease-orion-content);
+  transition-delay: 0ms;
+}
+
+.t-navbar-mobile-menu[data-open='true'] .t-navbar-mobile-item {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: min(calc(var(--navbar-mobile-item-index, 0) * var(--motion-delay-stagger-step)), var(--motion-delay-stagger-max));
+}
+
+.t-navbar-mobile-menu[data-open='false'] .t-navbar-mobile-item {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition-delay: 0ms;
+}
+
+@starting-style {
+  .t-navbar-mobile-menu[data-open='true'] .t-navbar-mobile-item {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* The accordion owns the mobile submenu's only height transition. The
+   nested panel keeps its semantic state and content without starting a
+   second surface animation. */
+.t-navbar-mobile-submenu .t-navbar-panel {
+  height: auto;
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.t-navbar-mobile-submenu .t-navbar-panel[data-open] .t-navbar-panel-item {
+  animation: none;
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* Static overlay and disclosure layout hooks retain the
+   existing selectors and static clipping/layout contract. */
+.t-overlay-backdrop,
+.t-bottom-sheet-backdrop {
+  pointer-events: auto;
+}
+
+/* Shadcn Base Drawer choreography: fast response with a soft landing.
+   Entry uses --motion-duration-sheet-in and the exit is velocity-scaled from
+   --motion-duration-sheet-out. Backdrop color remains semantic and has no blur. */
+.t-bottom-sheet-backdrop {
+  --bottom-sheet-open-dur: var(--motion-duration-sheet-in);
+  --bottom-sheet-close-dur: var(--motion-duration-sheet-out);
+  opacity: max(0, calc(1 - var(--drawer-swipe-progress, 0)));
+  transition: opacity var(--bottom-sheet-open-dur) var(--ease-sheet-backdrop);
+}
+
+.t-bottom-sheet {
+  --bottom-sheet-open-dur: var(--motion-duration-sheet-in);
+  --bottom-sheet-close-dur: var(--motion-duration-sheet-out);
+  --bottom-sheet-closed-transform: translateY(calc(100% + 2px));
+  transform: translateY(var(--drawer-swipe-movement-y, 0px));
+  transition: transform var(--bottom-sheet-open-dur) var(--ease-sheet);
+}
+
+.t-bottom-sheet[data-closed],
+.t-bottom-sheet[data-starting-style],
+.t-bottom-sheet[data-ending-style] {
+  transform: var(--bottom-sheet-closed-transform);
+}
+
+.t-bottom-sheet[data-ending-style] {
+  transition-duration: calc(var(--drawer-swipe-strength, 1) * var(--bottom-sheet-close-dur));
+}
+
+.t-bottom-sheet[data-swiping]:not([data-ending-style]) {
+  transform: translateY(var(--drawer-swipe-movement-y, 0px));
+  transition-duration: 0ms;
+}
+
+.t-bottom-sheet-backdrop[data-starting-style] {
+  opacity: 0;
+}
+
+.t-bottom-sheet-backdrop[data-ending-style] {
+  opacity: 0;
+  transition-duration: calc(var(--drawer-swipe-strength, 1) * var(--bottom-sheet-close-dur));
+}
+
+.t-bottom-sheet-backdrop[data-swiping]:not([data-ending-style]) {
+  opacity: max(0, calc(1 - var(--drawer-swipe-progress, 0)));
+  transition-duration: 0ms;
+}
+
+.t-drawer-backdrop {
+  --drawer-open-dur: var(--motion-duration-sheet-in);
+  --drawer-close-dur: var(--motion-duration-sheet-out);
+  opacity: max(0, calc(1 - var(--drawer-swipe-progress, 0)));
+  transition: opacity var(--drawer-open-dur) var(--ease-sheet-backdrop);
+}
+
+.t-drawer {
+  --drawer-open-dur: var(--motion-duration-sheet-in);
+  --drawer-close-dur: var(--motion-duration-sheet-out);
+  --drawer-closed-transform: translate3d(calc(100% + 2px), 0, 0);
+  transform: translate3d(var(--drawer-swipe-movement-x, 0px), 0, 0);
+  transition: transform var(--drawer-open-dur) var(--ease-sheet);
+}
+
+.t-drawer[data-starting-style],
+.t-drawer[data-ending-style] {
+  transform: var(--drawer-closed-transform);
+}
+
+.t-drawer[data-ending-style] {
+  transition-duration: calc(var(--drawer-swipe-strength, 1) * var(--drawer-close-dur));
+}
+
+.t-drawer[data-swiping]:not([data-ending-style]) {
+  transform: translate3d(var(--drawer-swipe-movement-x, 0px), 0, 0);
+  transition-duration: 0ms;
+}
+
+.t-drawer-backdrop[data-starting-style] {
+  opacity: 0;
+}
+
+.t-drawer-backdrop[data-ending-style] {
+  opacity: 0;
+  transition-duration: calc(var(--drawer-swipe-strength, 1) * var(--drawer-close-dur));
+}
+
+.t-drawer-backdrop[data-swiping]:not([data-ending-style]) {
+  opacity: max(0, calc(1 - var(--drawer-swipe-progress, 0)));
+  transition-duration: 0ms;
+}
+
+.t-dialog-backdrop {
+  --dialog-open-dur: var(--motion-duration-dialog);
+  --dialog-close-dur: var(--dialog-open-dur);
+  opacity: 1;
+  transition: opacity var(--dialog-open-dur) var(--ease-dialog);
+}
+
+.t-dialog-backdrop[data-starting-style],
+.t-dialog-backdrop[data-ending-style] {
+  opacity: 0;
+}
+
+.t-dialog-backdrop[data-ending-style] {
+  transition-duration: var(--dialog-close-dur);
+}
+
+.t-card-image-overlay-image {
+  transform: scale(1);
+  transition: transform var(--motion-duration-resize) var(--ease-orion-content);
+}
+
+.t-card-image-overlay:hover .t-card-image-overlay-image {
+  transform: scale(1.04);
+}
+
+.t-card-image-overlay:active .t-card-image-overlay-image {
+  transform: scale(1);
+}
+
+/* Shadcn Base Dialog: a brief centered fade/zoom, synchronized with its backdrop
+   through --motion-duration-dialog. */
+.t-modal {
+  --dialog-open-dur: var(--motion-duration-dialog);
+  --dialog-close-dur: var(--dialog-open-dur);
+  --dialog-open-transform: scale(0.95);
+  --dialog-close-transform: var(--dialog-open-transform);
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity var(--dialog-open-dur) var(--ease-dialog),
+    transform var(--dialog-open-dur) var(--ease-dialog);
+}
+
+.t-modal[data-starting-style] {
+  opacity: 0;
+  transform: var(--dialog-open-transform);
+}
+
+.t-modal[data-ending-style] {
+  opacity: 0;
+  transform: var(--dialog-close-transform);
+  transition-duration: var(--dialog-close-dur);
+}
+
+/* Keep opening surfaces interactive; Base UI owns focus and final hiding. */
+.t-overlay-backdrop[data-ending-style],
+.t-bottom-sheet-backdrop[data-ending-style],
+.t-modal[data-ending-style],
+.t-drawer[data-ending-style],
+.t-bottom-sheet[data-ending-style] {
+  pointer-events: none;
+}
+
+/* Header padding stays fixed at the selected density in both states, keeping
+   the body anchored while Base UI controls panel height and presence. */
+.t-acc-panel {
+  box-sizing: border-box;
+  height: var(--accordion-panel-height);
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: height var(--motion-duration-disclosure) var(--ease-orion-content);
+}
+
+.t-acc-panel[data-starting-style],
+.t-acc-panel[data-ending-style] {
+  height: 0;
+}
+
+.t-acc-panel-inner {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.t-acc-panel-inner > * {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Carousels and opt-in overlays can escape the open panel. The panel lifecycle
+   still masks content during the collapsed/opening/closing track. */
+.t-acc-panel:has(.ds-carousel-viewport),
+.t-acc-panel[data-overflow-visible] {
+  overflow: visible;
+  clip-path: inset(0 -100vmax);
+}
+
+.t-acc-panel[data-open]:has(.ds-carousel-viewport) {
+  clip-path: inset(calc(var(--spacing-6) * -1) -100vmax);
+}
+
+.t-acc-panel[data-open][data-overflow-visible] {
+  clip-path: inset(-100vmax);
+}
+
+.t-acc-panel:is([data-starting-style], [data-ending-style]):is([data-overflow-visible], :has(.ds-carousel-viewport)) {
+  clip-path: inset(0 -100vmax);
+}
+
+.t-acc-panel:has(.ds-carousel-viewport) > .t-acc-panel-inner,
+.t-acc-panel[data-overflow-visible] > .t-acc-panel-inner {
+  overflow: visible;
+}
+
+/* Native scroll owns horizontal clipping; the compensated block safe-area
+   leaves room for card shadows without adding visible layout height. */
+.ds-carousel-viewport {
+  --ds-carousel-safe-area-block: var(--spacing-6);
+  box-sizing: border-box;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  padding-block: var(--ds-carousel-safe-area-block);
+  margin-block: calc(var(--ds-carousel-safe-area-block) * -1);
+}
+
+.ds-carousel-viewport::-webkit-scrollbar { display: none; }
+.ds-carousel-viewport > :first-child { overflow: visible; }
+.ds-carousel-viewport > :first-child > :last-child { scroll-snap-align: end; }
+
+[data-carousel-bleed] .ds-carousel-viewport {
+  scroll-padding-inline: var(--ds-carousel-leading, var(--ds-carousel-gutter, var(--spacing-6)));
+}
+
+[data-carousel-bleed] .ds-carousel-viewport > :first-child {
+  padding-inline-start: var(--ds-carousel-leading, var(--ds-carousel-gutter, var(--spacing-6)));
+  padding-inline-end: var(--ds-carousel-trailing, var(--ds-carousel-gutter, var(--spacing-6)));
+}
+
+.t-acc-chevron {
+  transform: rotate(0deg);
+  transition: transform var(--motion-duration-disclosure) var(--ease-orion-content);
+}
+
+.t-acc-item:has(> .t-acc-panel:not([data-starting-style], [data-ending-style])) > .t-acc-header > .t-acc-trigger > .t-acc-chevron {
+  transform: rotate(180deg);
+}
+
+.t-checkbox-atom {
+  position: relative;
+  transition:
+    background-color var(--motion-duration-toggle) var(--ease-orion-content),
+    border-color var(--motion-duration-toggle) var(--ease-orion-content);
+}
+
+.t-checkbox-mark {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.55);
+  transition:
+    opacity var(--motion-duration-toggle) var(--ease-orion-content),
+    transform var(--motion-duration-toggle) var(--ease-orion-content);
+}
+
+.t-checkbox-atom[data-disabled],
+.t-checkbox-atom[data-disabled] .t-checkbox-mark,
+.t-checkbox-atom:is(:focus-visible, [aria-disabled='true'], [inert]),
+.t-checkbox-atom:is(:focus-visible, [aria-disabled='true'], [inert]) .t-checkbox-mark,
+.group\/checkbox:focus-within .t-checkbox-atom,
+.group\/checkbox:focus-within .t-checkbox-mark,
+[inert] .t-checkbox-atom,
+[inert] .t-checkbox-mark {
+  transition: none !important;
+}
+
+.t-checkbox-atom[data-checked='true'] .t-checkbox-mark-check,
+.t-checkbox-atom[data-indeterminate='true'] .t-checkbox-mark-indeterminate {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.t-checkbox-atom[data-indeterminate='true'] .t-checkbox-mark-check {
+  opacity: 0;
+  transform: scale(0.55);
+}
+
+.t-checkbox-atom:not([data-checked='true']):not([data-indeterminate='true']) .t-checkbox-mark-ghost {
+  opacity: 0;
+}
+
+.group\/checkbox:hover .t-checkbox-atom:not([data-disabled='true']) .t-checkbox-mark-ghost {
+  opacity: 1;
+  transform: scale(0.8);
+}
+
+/* Filter Ecommerce keeps the applied summary mounted so the sections below
+   can reposition through a real layout transition when a filter changes. */
+.t-filter-ecommerce-applied {
+  --filter-ecommerce-resize-dur: var(--motion-duration-resize);
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-block-end: calc(var(--spacing-6) * -1);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--filter-ecommerce-resize-dur) var(--ease-orion-content),
+    margin-block-end var(--filter-ecommerce-resize-dur) var(--ease-orion-content),
+    opacity var(--motion-duration-feedback) var(--ease-orion-content),
+    visibility 0s linear var(--filter-ecommerce-resize-dur);
+}
+
+.t-filter-ecommerce-applied[data-open='true'] {
+  grid-template-rows: 1fr;
+  margin-block-end: 0;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.t-filter-ecommerce-applied > * {
+  min-height: 0;
+  overflow: visible;
+}
+
+.t-filter-ecommerce-applied[data-open='false'] > * {
+  overflow: hidden;
+}
+
+.t-filter-ecommerce-chip-list-shell {
+  overflow: visible;
+  transition: height var(--filter-ecommerce-resize-dur) var(--ease-orion-content);
+}
+
+.t-bottom-sheet .t-filter-ecommerce-mobile-sheet {
+  background-color: var(--color-neutral-bg-surface-level-0);
+}
+
+.t-filter-ecommerce-mobile-sheet .t-filter-ecommerce-mobile-sheet-header,
+.t-filter-ecommerce-mobile-sheet .t-filter-ecommerce-mobile-sheet-actions {
+  position: relative;
+  z-index: 1;
+  background-color: var(--color-neutral-bg-surface-level-0);
+  backdrop-filter: blur(var(--blur-dense));
+}
+
+.t-filter-ecommerce-mobile-sheet .t-filter-ecommerce-mobile-sheet-body {
+  position: relative;
+  z-index: 0;
+  background-color: var(--color-neutral-bg-surface-level-0);
+  backdrop-filter: blur(var(--blur-dense));
+}
+
+.t-filter-ecommerce-mobile-sheet .t-filter-ecommerce-mobile-sheet-body > div {
+  flex: none;
+  min-height: max-content;
+}
+
+.t-filter-ecommerce-chip-stage {
+  position: relative;
+}
+
+.t-filter-ecommerce-chip-exit-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.t-filter-ecommerce-chip {
+  display: inline-flex;
+  animation: t-filter-ecommerce-chip-in var(--motion-duration-child) var(--ease-orion-content) both;
+}
+
+.t-filter-ecommerce-chip-exit {
+  position: absolute;
+}
+
+.t-filter-ecommerce-chip[data-state='leaving'] {
+  pointer-events: none;
+  animation: t-filter-ecommerce-chip-out var(--motion-duration-child) var(--ease-orion-content) both;
+}
+
+@keyframes t-filter-ecommerce-chip-in {
+  from {
+    opacity: 0;
+    transform: translateY(-2px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes t-filter-ecommerce-chip-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-2px) scale(0.96);
+  }
+}
+
+/* Tooltip visibility stays mounted so CSS can animate both entering and
+   leaving without a second animation runtime. Consumers own the open state. */
+.t-tt {
+  --tt-in-dur: var(--motion-duration-feedback);
+  --tt-out-dur: var(--motion-duration-tooltip-out);
+  --tt-delay: var(--motion-delay-tooltip);
+  --tt-arrow-size: 6px;
+  --tt-icon-size: 20px;
+  --tt-trigger-size: 36px;
+  --tt-icon-gap: 4px;
+  --tt-icon-inset: calc((var(--tt-trigger-size) - var(--tt-icon-size)) / 2);
+  --tt-offset-x: 0px;
+  --tt-offset-y: 0px;
+  --tt-align-x: 0%;
+  --tt-align-y: 0%;
+  --tt-hit-area: 8px;
+  backdrop-filter: blur(var(--blur-light));
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transform:
+    translateX(var(--tt-align-x))
+    translateY(var(--tt-align-y));
+  transition:
+    opacity var(--tt-out-dur) var(--ease-orion-content),
+    visibility 0s linear var(--tt-out-dur);
+}
+
+/* Storybook Docs also styles spans; keep the component's type scale authoritative. */
+.t-tt > [data-slot='tooltip-title'] {
+  font-size: var(--text-sm);
+  line-height: var(--line-height-16);
+}
+
+.t-tt > [data-slot='tooltip-body'] {
+  font-size: var(--text-xs);
+  line-height: var(--line-height-14);
+}
+
+/* Extends pointer coverage without changing the popup's dimensions or layout
+   box, keeping the hover path stable across the trigger-to-tooltip gap. */
+.t-tt::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--tt-hit-area) * -1);
+  border-radius: inherit;
+}
+
+.t-tt[data-position='top'] {
+  --tt-offset-y: 2px;
+  margin-bottom: calc(var(--tt-icon-gap) - var(--tt-icon-inset) + var(--tt-arrow-size));
+  transform-origin: 50% 100%;
+}
+
+.t-tt[data-position='bottom'] {
+  --tt-offset-y: -2px;
+  margin-top: calc(var(--tt-icon-gap) - var(--tt-icon-inset) + var(--tt-arrow-size));
+  transform-origin: 50% 0%;
+}
+
+.t-tt[data-position='left'] {
+  --tt-offset-x: 2px;
+  margin-right: calc(var(--tt-icon-gap) - var(--tt-icon-inset) + var(--tt-arrow-size));
+  transform-origin: 100% 50%;
+}
+
+.t-tt[data-position='right'] {
+  --tt-offset-x: -2px;
+  margin-left: calc(var(--tt-icon-gap) - var(--tt-icon-inset) + var(--tt-arrow-size));
+  transform-origin: 0% 50%;
+}
+
+.t-tt[data-position='top'][data-align='center'],
+.t-tt[data-position='bottom'][data-align='center'] {
+  --tt-align-x: -50%;
+}
+
+.t-tt[data-position='left'][data-align='center'],
+.t-tt[data-position='right'][data-align='center'] {
+  --tt-align-y: -50%;
+}
+
+.t-tt[data-open] {
+  --tt-offset-x: 0px;
+  --tt-offset-y: 0px;
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transition-duration: var(--tt-in-dur);
+  transition-timing-function: var(--ease-orion-content);
+  transition-delay: var(--tt-delay);
+}
+
+.t-tt[data-closed] {
+  transition-delay: 0ms;
+}
+
+/* Calendar pages enter from the direction of month navigation. The static
+   motion boundary keeps the lifecycle in React while CSS owns the visual transition. */
+.t-page-slide[data-page='1'] .t-page {
+  animation: t-page-slide-from-left var(--motion-duration-calendar) var(--ease-orion-content);
+}
+
+.t-page-slide[data-page='2'] .t-page {
+  animation: t-page-slide-from-right var(--motion-duration-calendar) var(--ease-orion-content);
+}
+
+.t-digit-group {
+  --digit-dur: var(--motion-duration-digit);
+  --digit-distance: 8px;
+  --digit-stagger: 33ms;
+  --digit-ease: var(--ease-orion-content);
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.t-digit {
+  display: inline-block;
+}
+
+.t-digit-group.is-animating .t-digit {
+  animation: t-digit-pop-in var(--digit-dur) var(--digit-ease) both;
+}
+
+@keyframes t-digit-pop-in {
+  0% {
+    transform: translateY(var(--digit-distance));
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-digit-group .t-digit {
+    animation: none !important;
+  }
+}
+
+@keyframes t-page-slide-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes t-page-slide-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-page-slide[data-page='1'] .t-page,
+  .t-page-slide[data-page='2'] .t-page {
+    animation: none;
+  }
+}
+
+.t-dropdown-surface {
+  --dropdown-open-dur: var(--motion-duration-surface-in);
+  --dropdown-close-dur: var(--motion-duration-surface-out);
+  --dropdown-pre-scale: 0.97;
+  --dropdown-closing-scale: 0.99;
+  transform: scale(var(--dropdown-pre-scale));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-open-dur) var(--ease-orion-content),
+    opacity var(--dropdown-open-dur) var(--ease-orion-content);
+}
+
+.t-dropdown-surface[data-origin='top-left'] {
+  transform-origin: top left;
+}
+
+.t-dropdown-surface[data-origin='top-center'] {
+  transform-origin: top center;
+}
+
+.t-dropdown-surface[data-origin='top-right'] {
+  transform-origin: top right;
+}
+
+.t-dropdown-surface[data-origin='bottom-left'] {
+  transform-origin: bottom left;
+}
+
+.t-dropdown-surface[data-origin='bottom-right'] {
+  transform-origin: bottom right;
+}
+
+.t-dropdown-surface[data-open] {
+  transform: scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@starting-style {
+  .t-dropdown-surface[data-open] {
+    transform: scale(var(--dropdown-pre-scale));
+    opacity: 0;
+  }
+}
+
+.t-dropdown-surface[data-starting-style] {
+  transform: scale(var(--dropdown-pre-scale));
+  opacity: 0;
+  pointer-events: auto;
+}
+
+.t-dropdown-surface[data-closed],
+.t-dropdown-surface[data-ending-style] {
+  transform: scale(var(--dropdown-closing-scale));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-close-dur) var(--ease-orion-content),
+    opacity var(--dropdown-close-dur) var(--ease-orion-content);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-checkbox-atom,
+  .t-checkbox-mark,
+  .t-dropdown-surface {
+    transition-duration: 0ms;
+    transform: none;
+  }
+
+  .t-bottom-sheet,
+  .t-bottom-sheet-backdrop,
+  .t-drawer,
+  .t-drawer-backdrop,
+  .t-modal,
+  .t-dialog-backdrop,
+  .t-card-image-overlay-image {
+    transition-duration: 0ms;
+    transform: none;
+  }
+}
+
+@keyframes t-bar-chart-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.t-bar-chart-bar {
+  transform: scaleY(0);
+  transform-origin: bottom;
+  animation: t-bar-chart-grow var(--motion-duration-fill) var(--ease-orion-content) var(--indicator-fill-delay, 0ms)
+    both;
+}
+
+@keyframes t-spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.t-spinner {
+  transform-origin: center;
+  animation: t-spinner-rotate var(--motion-duration-spin) linear infinite;
+}
+
+.t-progress-bar-fill {
+  border-radius: var(--radius-container-full) !important;
+  width: var(--progress-fill-width, 0%);
+  transition: width var(--motion-duration-fill) var(--ease-orion-content);
+}
+
+.t-gauge-indicator-fill {
+  stroke-dasharray: var(--gauge-fill-length, 0px) var(--gauge-arc-length, 0px);
+  stroke-dashoffset: 0;
+  transition:
+    stroke-dasharray var(--motion-duration-fill) var(--ease-orion-content),
+    visibility var(--motion-duration-fill) linear;
+}
+
+/* Stepper connectors keep their track mounted and animate only the semantic
+   fill when a following step becomes complete. The connector state comes
+   from AtomBarAtom, so the transition never needs a second state owner. */
+.t-stepper-connector-fill {
+  width: 0;
+  transition: width var(--motion-duration-fill) var(--ease-orion-content);
+}
+
+.t-stepper-connector[data-state='Active'] .t-stepper-connector-fill,
+.t-stepper-connector[data-state='Success'] .t-stepper-connector-fill {
+  width: 100%;
+}
+
+.t-stepper-mobile-progress-fill {
+  transition: width var(--motion-duration-fill) var(--ease-orion-content);
+}
+
+.t-icon-swap {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 1em;
+  height: 1em;
+}
+
+.t-icon-swap > .t-icon {
+  grid-area: 1 / 1;
+  transition: opacity var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-icon-swap > .t-icon[data-icon='current'] {
+  opacity: 1;
+}
+
+.t-icon-swap > .t-icon[data-icon='previous'] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@starting-style {
+  .t-icon-swap[data-state='swap'] > .t-icon[data-icon='current'] {
+    opacity: 0;
+  }
+}
+
+/* ProductTitle keeps the favorite-specific state local to its default Heart
+   icon while the hit area and button semantics remain owned by ActionIcon. */
+.t-product-title-favorite-icon {
+  display: inline-flex;
+  transform-origin: center;
+}
+
+.t-product-title-favorite-heart {
+  color: currentColor;
+  transition:
+    color var(--motion-duration-feedback) var(--ease-orion-content),
+    fill var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-product-title-favorite-heart path {
+  transition:
+    fill var(--motion-duration-feedback) var(--ease-orion-content),
+    stroke var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-product-title-favorite-icon[data-favorite='true'] .t-product-title-favorite-heart {
+  color: var(--color-primary-bg-default);
+}
+
+@starting-style {
+  .t-progress-bar-fill {
+    width: 0;
+  }
+
+  .t-gauge-indicator-fill {
+    stroke-dasharray: 0 var(--gauge-arc-length, 0px);
+  }
+}
+
+@keyframes t-skeleton-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes t-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.t-toast {
+  --toast-open: var(--motion-duration-surface-in);
+  --toast-close: var(--motion-duration-toast-out);
+  --toast-distance: 16px;
+  --toast-scale: 0.97;
+  --toast-ease: var(--ease-orion-content);
+  --toast-enter-translate: translateY(var(--toast-distance));
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity var(--toast-close) var(--toast-ease),
+    transform var(--toast-close) var(--toast-ease);
+}
+
+.t-toast[data-position='top-right'] {
+  --toast-enter-translate: translateX(var(--toast-distance));
+}
+
+.t-toast[data-position='top-left'] {
+  --toast-enter-translate: translateX(calc(var(--toast-distance) * -1));
+}
+
+.t-toast[data-position='bottom'] {
+  --toast-enter-translate: translateY(var(--toast-distance));
+}
+
+.t-toast[data-position='top'] {
+  --toast-enter-translate: translateY(calc(var(--toast-distance) * -1));
+}
+
+.t-toast.is-closed,
+.t-toast[data-open='false'] {
+  animation: none;
+  opacity: 0;
+  transform: var(--toast-enter-translate) scale(var(--toast-scale));
+  pointer-events: none;
+}
+
+.t-toast.is-open,
+.t-toast[data-open='true'] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  transition:
+    opacity var(--toast-open) var(--toast-ease),
+    transform var(--toast-open) var(--toast-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-toast {
+    transition: none !important;
+  }
+}
+
+.t-skeleton {
+  position: relative;
+  overflow: hidden;
+  contain: paint;
+}
+
+.t-skeleton--shimmer::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-neutral-bg-soft) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: t-skeleton-shimmer var(--motion-duration-shimmer) var(--ease-orion-content) infinite;
+}
+
+.t-skeleton--pulse {
+  animation: t-skeleton-pulse var(--motion-duration-pulse) var(--ease-orion-content) 1;
+}
+
+.t-skeleton--none::after,
+.t-skeleton--none {
+  animation: none;
+}
+
+.t-skeleton-reveal {
+  --skeleton-reveal-duration: var(--motion-duration-fill);
+  --skeleton-reveal-blur: calc(var(--blur-sm) / 2);
+  position: relative;
+  display: grid;
+}
+
+.t-skeleton-reveal-placeholder,
+.t-skeleton-reveal-content {
+  grid-area: 1 / 1;
+  min-width: 0;
+  transition: none;
+}
+
+.t-skeleton-reveal-placeholder {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  filter: blur(0);
+}
+
+.t-skeleton-reveal-content {
+  z-index: 2;
+  opacity: 0;
+  filter: blur(var(--skeleton-reveal-blur));
+  pointer-events: none;
+}
+
+.t-skeleton-reveal[data-state='loaded'] .t-skeleton-reveal-placeholder {
+  opacity: 0;
+  filter: blur(var(--skeleton-reveal-blur));
+  pointer-events: none;
+  transition:
+    opacity var(--skeleton-reveal-duration) var(--ease-orion-content),
+    filter var(--skeleton-reveal-duration) var(--ease-orion-content);
+}
+
+.t-skeleton-reveal[data-state='loaded'] .t-skeleton-reveal-content {
+  opacity: 1;
+  filter: blur(0);
+  pointer-events: auto;
+  transition:
+    opacity var(--skeleton-reveal-duration) var(--ease-orion-content),
+    filter var(--skeleton-reveal-duration) var(--ease-orion-content);
+}
+
+.t-skeleton-reveal[data-state='loaded'] .t-skeleton--pulse {
+  animation: none;
+}
+
+/* Base UI renders scrollbar and thumb as positioned elements rather than
+   native scrollbar pseudo-elements. */
+.t-scrollarea-scrollbar {
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+}
+.t-scrollarea-scrollbar[data-hovering],
+.t-scrollarea-scrollbar[data-scrolling] {
+  opacity: 1;
+  pointer-events: auto;
+}
+.t-scrollarea-scrollbar[data-scrolling] {
+  opacity: 1;
+}
+.t-scrollarea-scrollbar[data-orientation="vertical"] {
+  width: var(--spacing-1);
+}
+.t-scrollarea-scrollbar[data-orientation="horizontal"] {
+  height: var(--spacing-1);
+}
+.t-scrollarea-thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-container-full);
+  background-color: var(--color-neutral-border-subtle);
+}
+
+/* Orion Web scrolls across the full screen while its dynamic gutters preserve
+   the flow container alignment at the beginning and end of the track. */
+.orion-web-carousel-viewport {
+  position: relative;
+  left: 50%;
+  width: 100vw !important;
+  transform: translateX(-50%);
+  scroll-padding-inline-start: var(--mi-plan-carousel-leading-gutter, 0px);
+}
+
+.custom-scrollbar::-webkit-scrollbar-button {
+  display: none;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--color-neutral-border-subtle);
+  border-radius: 999px;
+}
+
+.table-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-bg-soft) var(--color-neutral-bg-subtle);
+}
+.table-scrollbar::-webkit-scrollbar {
+  width: var(--spacing-1);
+  height: var(--spacing-1);
+}
+.table-scrollbar::-webkit-scrollbar-button {
+  display: none;
+}
+.table-scrollbar::-webkit-scrollbar-track,
+.table-scrollbar::-webkit-scrollbar-corner {
+  background-color: var(--color-neutral-bg-subtle);
+  border-radius: var(--radius-container-full);
+}
+.table-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--color-neutral-bg-soft);
+  border-radius: var(--radius-container-full);
+}
+
+.table-scrollbar-exposed {
+  scrollbar-width: none;
+}
+.table-scrollbar-exposed::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* Input helper text reveal. The existing data-state attribute owns the
+   lifecycle; height and opacity are the only visual changes so the message
+   stays legible without a stagger, transform or animated blur. */
+.ds-disclosure-text {
+  --help-text-disclosure-dur: var(--motion-duration-disclosure);
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  pointer-events: none;
+  transition: grid-template-rows var(--help-text-disclosure-dur) var(--ease-orion-content);
+}
+
+.ds-disclosure-text[data-state='open'] {
+  grid-template-rows: 1fr;
+  pointer-events: auto;
+}
+
+.ds-disclosure-text__content {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.t-stagger .t-stagger-line {
+  display: block;
+  opacity: 0;
+  transition: opacity var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-stagger[data-state='open'] .t-stagger-line {
+  opacity: 1;
+}
+
+.t-stagger[data-state='closed'] .t-stagger-line {
+  opacity: 0;
+  transition: opacity var(--motion-duration-feedback) var(--ease-orion-content);
+  transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-disclosure-text,
+  .ds-disclosure-text__content,
+  .t-stagger .t-stagger-line {
+    transition: none !important;
+  }
+}

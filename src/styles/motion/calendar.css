@@ -1,0 +1,114 @@
+/* Calendar motion stays on stable wrappers and uses theme-owned timing. */
+
+.t-calendar-month {
+  --calendar-month-duration: var(--motion-duration-calendar);
+  animation-fill-mode: both;
+}
+
+.t-calendar-month[data-direction='forward'][data-cycle='0'] {
+  animation: t-calendar-month-forward-a var(--calendar-month-duration) var(--ease-orion-content) both;
+}
+
+.t-calendar-month[data-direction='forward'][data-cycle='1'] {
+  animation: t-calendar-month-forward-b var(--calendar-month-duration) var(--ease-orion-content) both;
+}
+
+.t-calendar-month[data-direction='backward'][data-cycle='0'] {
+  animation: t-calendar-month-backward-a var(--calendar-month-duration) var(--ease-orion-content) both;
+}
+
+.t-calendar-month[data-direction='backward'][data-cycle='1'] {
+  animation: t-calendar-month-backward-b var(--calendar-month-duration) var(--ease-orion-content) both;
+}
+
+.t-calendar-month-page {
+  min-height: 100%;
+}
+
+@keyframes t-calendar-month-forward-a {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes t-calendar-month-forward-b {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes t-calendar-month-backward-a {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes t-calendar-month-backward-b {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.t-calendar-view[data-cycle='0'],
+.t-calendar-view[data-cycle='1'],
+.t-calendar-header-view[data-cycle='0'],
+.t-calendar-header-view[data-cycle='1'] {
+  animation-duration: var(--motion-duration-feedback);
+  animation-timing-function: var(--ease-orion-content);
+  animation-fill-mode: both;
+}
+
+.t-calendar-view[data-cycle='0'],
+.t-calendar-header-view[data-cycle='0'] {
+  animation-name: t-calendar-view-fade-a;
+}
+
+.t-calendar-view[data-cycle='1'],
+.t-calendar-header-view[data-cycle='1'] {
+  animation-name: t-calendar-view-fade-b;
+}
+
+@keyframes t-calendar-view-fade-a {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes t-calendar-view-fade-b {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.t-calendar-digit-group[data-cycle='0'],
+.t-calendar-digit-group[data-cycle='1'] {
+  display: inline-flex;
+}
+
+.t-calendar-digit {
+  display: inline-block;
+}
+
+.t-calendar-digit-group[data-cycle='0'] .t-calendar-digit {
+  animation: t-calendar-digit-in-a var(--motion-duration-digit) var(--ease-orion-content) both;
+  animation-delay: var(--calendar-digit-delay, 0ms);
+}
+
+.t-calendar-digit-group[data-cycle='1'] .t-calendar-digit {
+  animation: t-calendar-digit-in-b var(--motion-duration-digit) var(--ease-orion-content) both;
+  animation-delay: var(--calendar-digit-delay, 0ms);
+}
+
+@keyframes t-calendar-digit-in-a {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes t-calendar-digit-in-b {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.t-calendar-cell {
+  transition-property: color, background-color, border-color;
+  transition-duration: var(--motion-duration-feedback);
+  transition-timing-function: var(--ease-orion-content);
+}
+
+.t-calendar-cell:is(:focus, :focus-visible, :disabled, [aria-disabled='true'], [data-disabled='true']) {
+  transition: none !important;
+}

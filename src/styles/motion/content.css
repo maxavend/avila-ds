@@ -1,0 +1,58 @@
+/* Ordered panels share a grid cell: the largest panel reserves the viewport.
+   Both layers travel in the same direction; reversing value reverses the CSS
+   transition from its current visual position without timers or snapshots. */
+.t-content-transition {
+  --content-transition-duration: var(--motion-duration-surface-in);
+  --content-transition-distance: var(--spacing-small);
+  --content-transition-blur: var(--blur-sm);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  overflow: clip;
+}
+
+.t-content-transition > .t-content-transition-panel {
+  --content-transition-offset: 0px;
+  grid-area: 1 / 1;
+  min-width: 0;
+  min-height: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(var(--content-transition-offset));
+  filter: blur(var(--content-transition-blur));
+  transition:
+    opacity var(--content-transition-duration) var(--ease-orion-content),
+    transform var(--content-transition-duration) var(--ease-orion-content),
+    filter var(--content-transition-duration) var(--ease-orion-content),
+    visibility 0s linear var(--content-transition-duration);
+}
+
+.t-content-transition > [data-position='before'] {
+  --content-transition-offset: calc(-1 * var(--content-transition-distance));
+}
+
+.t-content-transition > [data-position='after'] {
+  --content-transition-offset: var(--content-transition-distance);
+}
+
+.t-content-transition[data-orientation='horizontal']:dir(rtl) > [data-position='before'] {
+  --content-transition-offset: var(--content-transition-distance);
+}
+
+.t-content-transition[data-orientation='horizontal']:dir(rtl) > [data-position='after'] {
+  --content-transition-offset: calc(-1 * var(--content-transition-distance));
+}
+
+.t-content-transition[data-orientation='vertical'] > .t-content-transition-panel {
+  transform: translateY(var(--content-transition-offset));
+}
+
+.t-content-transition > [data-position='active'] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  filter: blur(0);
+  transition-delay: 0s;
+}

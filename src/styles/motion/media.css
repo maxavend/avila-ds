@@ -1,0 +1,43 @@
+/* Loaded media: retain valid pixels while the next image loads. */
+
+.t-media-crossfade {
+  isolation: isolate;
+}
+
+.t-media-crossfade__placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.t-media-crossfade__layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity var(--motion-duration-feedback) var(--ease-orion-content);
+}
+
+.t-media-crossfade__layer[data-media-slot='previous'] {
+  opacity: 1;
+  pointer-events: none;
+}
+
+.t-media-crossfade__layer[data-media-slot='current'] {
+  z-index: 2;
+}
+
+.t-media-crossfade__layer[data-media-state='loaded'] {
+  opacity: 1;
+}
+
+/* A cached response can mark the first layer loaded before its initial
+ * style is painted. Keep that first loaded style at the same zero-opacity
+ * origin so the browser still creates the native fade. */
+@starting-style {
+  .t-media-crossfade__layer[data-media-state='loaded'] {
+    opacity: 0;
+  }
+}

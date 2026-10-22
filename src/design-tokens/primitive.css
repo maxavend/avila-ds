@@ -1,0 +1,263 @@
+/* PROVISIONAL: palette pending Figma variable export; replace with extracted values. */
+/* --- Collection: Primitive | Mode: Root --- */
+
+@theme {
+
+    /* --- Color / Ávila --- */
+    --color-avila-950: #101827;
+    --color-avila-900: #1c2937;
+    --color-avila-800: #29384b;
+    --color-avila-700: #36465b;
+    --color-avila-600: #4b5c72;
+    --color-avila-500: #687b91;
+    --color-avila-400: #93a2b5;
+    --color-avila-300: #bdc7d4;
+    --color-avila-200: #dce2e9;
+    --color-avila-100: #edf0f5;
+    --color-avila-50: #f8fafc;
+
+    /* --- Color / Magenta --- */
+    --color-magenta-950: #500118;
+    --color-magenta-900: #8f0c36;
+    --color-magenta-800: #a80937;
+    --color-magenta-700: #c80839;
+    --color-magenta-600: #ed1144;
+    --color-magenta-500: #ff4063;
+    --color-magenta-400: #ff6981;
+    --color-magenta-300: #ff9fac;
+    --color-magenta-200: #ffcad2;
+    --color-magenta-100: #ffe2e5;
+    --color-magenta-50: #fff0f1;
+
+    /* --- Color / Amber --- */
+    --color-amber-950: #451a03;
+    --color-amber-900: #78350f;
+    --color-amber-800: #92400e;
+    --color-amber-700: #b45309;
+    --color-amber-600: #d97706;
+    --color-amber-500: #f59e0b;
+    --color-amber-400: #fbbf24;
+    --color-amber-300: #fcd34d;
+    --color-amber-200: #fde68a;
+    --color-amber-100: #fef3c7;
+    --color-amber-50: #fffbeb;
+
+    /* --- Color / Turquoise --- */
+    --color-turquoise-950: #053947;
+    --color-turquoise-900: #125667;
+    --color-turquoise-800: #10687a;
+    --color-turquoise-700: #088296;
+    --color-turquoise-600: #009cb1;
+    --color-turquoise-500: #00cede;
+    --color-turquoise-400: #18ebf8;
+    --color-turquoise-300: #60f9ff;
+    --color-turquoise-200: #a1fdff;
+    --color-turquoise-100: #cdfffe;
+    --color-turquoise-50: #ebfffd;
+
+    /* --- Color / Red --- */
+    --color-red-950: #450a0a;
+    --color-red-900: #7f1d1d;
+    --color-red-800: #991b1b;
+    --color-red-700: #b91c1c;
+    --color-red-600: #dc2626;
+    --color-red-500: #ef4444;
+    --color-red-400: #f87171;
+    --color-red-300: #fca5a5;
+    --color-red-200: #fecaca;
+    --color-red-100: #fee2e2;
+    --color-red-50: #fef2f2;
+
+    /* --- Color / Green --- */
+    --color-green-950: #052e16;
+    --color-green-900: #14532d;
+    --color-green-800: #166534;
+    --color-green-700: #16803c;
+    --color-green-600: #16a34a;
+    --color-green-500: #22c55e;
+    --color-green-400: #4ade80;
+    --color-green-300: #86efac;
+    --color-green-200: #bbf7d0;
+    --color-green-100: #dcfce7;
+    --color-green-50: #f0fdf4;
+
+    /* --- Color / Blue --- */
+    --color-blue-950: #112240;
+    --color-blue-900: #1a3660;
+    --color-blue-800: #183f74;
+    --color-blue-700: #19498b;
+    --color-blue-600: #1c57a5;
+    --color-blue-500: #2c76cb;
+    --color-blue-400: #5293de;
+    --color-blue-300: #8fb8ea;
+    --color-blue-200: #c3d8f4;
+    --color-blue-100: #e4ecfa;
+    --color-blue-50: #f2f6fd;
+
+    /* --- Color / Wine --- */
+    --color-wine-950: #3f132f;
+    --color-wine-900: #622d50;
+    --color-wine-800: #773160;
+    --color-wine-700: #8c3872;
+    --color-wine-600: #b04993;
+    --color-wine-500: #cd68b3;
+    --color-wine-400: #df93cb;
+    --color-wine-300: #ebbcdf;
+    --color-wine-200: #f5d9f0;
+    --color-wine-100: #faedf8;
+    --color-wine-50: #fdf6fb;
+
+    /* --- Color / Neutral --- */
+    --color-neutral-950: #0a0a0a;
+    --color-neutral-900: #171717;
+    --color-neutral-800: #262626;
+    --color-neutral-700: #404040;
+    --color-neutral-600: #525252;
+    --color-neutral-500: #737373;
+    --color-neutral-400: #a3a3a3;
+    --color-neutral-300: #d4d4d4;
+    --color-neutral-200: #e5e5e5;
+    --color-neutral-100: #f5f5f5;
+    --color-neutral-50: #fafafa;
+
+    /* --- Color / Violet --- */
+    --color-violet-950: #3e1d4e;
+    --color-violet-900: #5c356e;
+    --color-violet-800: #714188;
+    --color-violet-700: #864aa6;
+    --color-violet-600: #9d5ebf;
+    --color-violet-500: #b886d5;
+    --color-violet-400: #c8a0e0;
+    --color-violet-300: #ddc5ed;
+    --color-violet-200: #e3bef9;
+    --color-violet-100: #f5edfa;
+    --color-violet-50: #fbf7fd;
+
+    /* --- Color / Black --- */
+    --color-black-black: #000000;
+
+    /* --- Color / White / Alpha --- */
+    --color-white-alpha-950: #fffffff2;
+    --color-white-alpha-900: #ffffffe5;
+    --color-white-alpha-800: #ffffffcc;
+    --color-white-alpha-700: #ffffffb2;
+    --color-white-alpha-600: #ffffff99;
+    --color-white-alpha-500: #ffffff80;
+    --color-white-alpha-400: #ffffff66;
+    --color-white-alpha-300: #ffffff4d;
+    --color-white-alpha-200: #ffffff33;
+    --color-white-alpha-100: #ffffff1a;
+    --color-white-alpha-50: #ffffff0d;
+    --color-white-alpha-25: #ffffff05;
+    --color-white-alpha-0: #ffffff00;
+
+    /* --- Color / Black / Alpha --- */
+    --color-black-alpha-950: #171717f2;
+    --color-black-alpha-900: #171717e5;
+    --color-black-alpha-800: #171717cc;
+    --color-black-alpha-700: #171717b2;
+    --color-black-alpha-600: #17171799;
+    --color-black-alpha-500: #17171780;
+    --color-black-alpha-400: #17171766;
+    --color-black-alpha-300: #1717174d;
+    --color-black-alpha-200: #17171733;
+    --color-black-alpha-100: #1717171a;
+    --color-black-alpha-50: #1717170d;
+    --color-black-alpha-25: #17171705;
+    --color-black-alpha-0: #17171700;
+
+    /* --- Color / White --- */
+    --color-white-white: #ffffff;
+
+    /* --- Radius --- */
+    --radius-none: 0rem;
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-3xl: 1.5rem;
+    --radius-full: 624.938rem;
+
+    /* --- Spacing --- */
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-6: 1.5rem;
+    --spacing-8: 2rem;
+    --spacing-12: 3rem;
+    --spacing-16: 4rem;
+    --spacing-24: 6rem;
+    --spacing-32: 8rem;
+
+    /* --- Spacing / Negative --- */
+    --spacing-negative-1: -0.25rem;
+    --spacing-negative-2: -0.5rem;
+    --spacing-negative-3: -0.75rem;
+    --spacing-negative-4: -1rem;
+    --spacing-negative-24: -1.5rem;
+
+    /* --- Stroke --- */
+    --stroke-1: 0.063rem;
+    --stroke-2: 0.125rem;
+    --stroke-4: 0.25rem;
+
+    /* --- Blur --- */
+    --blur-sm: 0.25rem;
+    --blur-default: 0.5rem;
+    --blur-md: 0.75rem;
+    --blur-lg: 1rem;
+    --blur-xl: 1.5rem;
+    --blur-2xl: 2.5rem;
+    --blur-3xl: 4rem;
+    --blur-4xl: 6rem;
+    --blur-5xl: 8rem;
+
+    /* --- Typography / Font --- */
+    --font-avila: system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-inter: "Inter Variable", sans-serif;
+
+
+    /* --- Typography / Font Weight --- */
+    --font-weight-thin: 100;
+    --font-weight-extra-light: 200;
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extra-bold: 800;
+    --font-weight-black: 900;
+
+    /* --- Typography / Line Height --- */
+    --line-height-10: 0.625rem;
+    --line-height-14: 0.875rem;
+    --line-height-16: 1rem;
+    --line-height-20: 1.25rem;
+    --line-height-22: 1.375rem;
+    --line-height-24: 1.5rem;
+    --line-height-28: 1.75rem;
+    --line-height-32: 2rem;
+    --line-height-48: 3rem;
+    --line-height-56: 3.5rem;
+    --line-height-68: 4.25rem;
+    --line-height-96: 6rem;
+    --line-height-128: 8rem;
+
+    /* --- Typography / Text --- */
+    --text-2xs: 0.625rem;
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+    --text-6xl: 3.75rem;
+    --text-7xl: 4.5rem;
+    --text-8xl: 6rem;
+    --text-9xl: 8rem;
+}
